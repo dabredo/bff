@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ul>
+      <li><router-link to="/animal-shelter">Protectora de animales</router-link></li>
+      <li><router-link to="/adoption">Adopcion</router-link></li>
+    </ul>
+
+    <router-view></router-view>
   </div>
 </template>
 
