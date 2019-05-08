@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <ul>
+      <li><router-link to="/">Inicio</router-link></li>
       <li><router-link to="/animal-shelter">Protectora de animales</router-link></li>
       <li><router-link to="/adoption">Adopcion</router-link></li>
     </ul>
