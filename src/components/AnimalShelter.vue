@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Amigos</h2>
-        <button v-on:click="displayAddFriend">Anadir</button>
+        <button v-if="!addFriendDisplayed" v-on:click="displayAddFriend">Anadir</button>
 
         <form v-if="addFriendDisplayed">
           <div>
