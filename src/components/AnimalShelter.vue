@@ -42,7 +42,7 @@
           <button v-on:click="addFriend">Guardar</button>
         </form>
 
-        <table v-if="friends.length">
+        <table v-if="friendsCount">
             <tr>
                 <th>Nombre</th>
                 <th>Raza</th>
@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+
 export default {
   name: 'AnimalShelter',
   data: function() {
@@ -88,9 +90,12 @@ export default {
         birthdate: '',
         state: '',
       },
-      addFriendDisplayed: false,
-      friends: []
+      addFriendDisplayed: false
     }
+  },
+  computed: {
+    ...mapState('animalShelter', [ 'friends' ]),
+    ...mapGetters('animalShelter', [ 'friendsCount' ])
   },
   methods: {
     displayAddFriend() {
@@ -98,7 +103,7 @@ export default {
     },
 
     addFriend() {
-      this.friends.push(Object.assign({}, this.newFriend))
+      this.$store.commit('animalShelter/add', Object.assign({}, this.newFriend))
 
       this.newFriend.name = ''
       this.newFriend.breed = ''
