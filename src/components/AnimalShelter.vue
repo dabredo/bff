@@ -1,28 +1,28 @@
 <template>
     <div>
         <h2>Amigos</h2>
-        <button v-if="!addFriendDisplayed" v-on:click="displayAddFriend">Anadir</button>
+        <button v-if="!selectedFriend" v-on:click="displayAddFriend">Anadir</button>
 
-        <form v-if="addFriendDisplayed">
+        <div v-if="selectedFriend">
           <div>
-            <label>Nombre</label>
-            <input type="text" v-model="newFriend.name">
+            <label>Name</label>
+            <input type="text" v-model="selectedFriend.name">
           </div>
 
           <div>
             <label>Raza</label>
-            <input type="text" v-model="newFriend.breed">
+            <input type="text" v-model="selectedFriend.breed">
           </div>
 
           <div>
             <label>Sexo</label>
-            Macho <input type="radio" v-model="newFriend.gender" value="m">
-            Hembra <input type="radio" v-model="newFriend.gender" value="f">
+            <label>Macho</label><input type="radio" v-model="selectedFriend.gender" value="m">
+            <label>Hembra</label><input type="radio" v-model="selectedFriend.gender" value="f">
           </div>
 
           <div>
             <label>Tamano</label>
-            <select v-model="newFriend.size">
+            <select v-model="selectedFriend.size">
               <option value="small" default>Pequeno</option>
               <option value="medium">Mediano</option>
               <option value="big">Grande</option>
@@ -31,16 +31,25 @@
 
           <div>
             <label>Fecha de nacimiento</label>
-            <input type="text" v-model="newFriend.birthdate">
+            <input type="text" v-model="selectedFriend.birthdate">
           </div>
 
           <div>
             <label>Estado</label>
-            <input type="text" v-model="newFriend.state">
+            <select v-model="selectedFriend.state">
+              <option value="no_adopted">No adoptado</option>
+              <option value="adopted">Adoptado</option>
+            </select>
           </div>
 
-          <button v-on:click="addFriend">Guardar</button>
-        </form>
+          <div>
+            <label>Descripcion</label>
+            <textarea v-model="selectedFriend.description"></textarea>
+          </div>
+
+          <button v-on:click="saveFriend(selectedFriend)">Guardar</button>
+          <button v-on:click="cancel">Cancel</button>
+        </div>
 
         <table v-if="friendsCount">
             <tr>
@@ -56,18 +65,20 @@
             <tr v-for="friend of friends">
                 <td>{{ friend.name }}</td>
                 <td>{{ friend.breed }}</td>
+                <td><template v-if="friend.gender === 'm'">Macho</template><template v-else>Hembra</template></td>
                 <td>
                   <template v-if="friend.size === 'small'">Pequeno</template>
                   <template v-else-if="friend.size === 'medium'">Mediano</template>
                   <template v-else>Grande</template>
                 </td>
-                <td><template v-if="friend.gender === 'm'">Macho</template><template v-else>Hembra</template></td>
                 <td>{{ friend.birthdate }}</td>
-                <td>{{ friend.state }}</td>
+                <td>
+                  <template v-if="friend.state === 'no_adopted'">No adoptado</template>
+                  <template v-else-if="friend.state === 'adopted'">Adoptado</template>
                 <td></td>
                 <td>
-                  <button v-on:click="displayEditFriend">Editar</button>
-                  <button v-on:click="deleteFriend">Eliminar</button>
+                  <button v-on:click="viewFriend(friend.id)">Ver</button>
+                  <button v-on:click="deleteFriend(friend.id)">Eliminar</button>
                 </td>
             </tr>
         </table>
@@ -81,46 +92,40 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'AnimalShelter',
   data: function() {
-    return {
-      newFriend: {
-        name: '',
-        breed: '',
-        gender: 'm',
-        size: 'small',
-        birthdate: '',
-        state: '',
-      },
-      addFriendDisplayed: false
-    }
+    return {}
   },
   computed: {
-    ...mapState('animalShelter', [ 'friends' ]),
+    ...mapState('animalShelter', [ 'friends', 'selectedFriend' ]),
     ...mapGetters('animalShelter', [ 'friendsCount' ])
+  },
+  created () {
+      this.$store.dispatch('animalShelter/getFriends');
   },
   methods: {
     displayAddFriend() {
-      this.addFriendDisplayed = true;
+      this.$store.commit('animalShelter/selectNewFriend')
     },
 
-    addFriend() {
-      this.$store.commit('animalShelter/add', Object.assign({}, this.newFriend))
-
-      this.newFriend.name = ''
-      this.newFriend.breed = ''
-      this.newFriend.gender = 'm'
-      this.newFriend.size = 'small'
-      this.newFriend.birthdate = ''
-      this.newFriend.state = ''
-
-      this.addFriendDisplayed = false;
+    saveFriend(friend) {
+      if (friend.id) {
+        this.$store.dispatch('animalShelter/updateFriend', friend)
+      } else {
+        this.$store.dispatch('animalShelter/createFriend', friend)
+      }
     },
 
-    displayEditFriend() {
-      console.log('soon display edit')
+    cancel() {
+        this.$store.commit('animalShelter/unselectFriend')
     },
 
-    deleteFriend() {
-      console.log('soon delete')
+    viewFriend(friendId) {
+      this.$store.dispatch('animalShelter/getFriend', friendId)
+    },
+
+    deleteFriend(friendId) {
+      if (confirm('Are you sure?')) {
+        this.$store.dispatch('animalShelter/deleteFriend', friendId)
+      }
     }
   }
 }
