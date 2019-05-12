@@ -124,6 +124,8 @@ export default {
 
     deleteFriend(friendId) {
       if (confirm('Are you sure?')) {
+        this.cancel()
+
         this.$store.dispatch('animalShelter/deleteFriend', friendId)
       }
     }
