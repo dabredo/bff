@@ -1,6 +1,7 @@
 import { animalService } from '../services/animal.service'
 
 export const animalShelter = {
+  strict: true,
   namespaced: true,
   state: {
     friends: [],
@@ -43,21 +44,21 @@ export const animalShelter = {
     },
     createFriend({ commit, dispatch }, friend) {
       animalService.create(friend)
-        .then(reponse => {
+        .then(() => {
           dispatch('getFriends')
-          .then( response => { commit('unselectFriend') });
+          .then(() => { commit('unselectFriend') });
         })
     },
     updateFriend({ commit , dispatch }, friend) {
       animalService.update(friend)
-      .then(reponse => {
+      .then(() => {
         dispatch('getFriends')
-        .then( response => { commit('unselectFriend') });
+        .then(() => { commit('unselectFriend') });
       })
     },
     deleteFriend({ dispatch }, friendId) {
       animalService.remove(friendId)
-        .then(reponse => dispatch('getFriends'))
+        .then(() => dispatch('getFriends'))
     }
   }
 }
