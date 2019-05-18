@@ -1,89 +1,88 @@
 <template>
-    <div>
-        <h2>Amigos</h2>
-        <button v-if="!selectedFriend" v-on:click="displayAddFriend">Anadir</button>
+    <v-container>
+        <h2 class="headline font-weight-bold mb-2">
+            Amigos
 
-        <div v-if="selectedFriend">
-          <div>
-            <label>Name</label>
-            <input type="text" v-model="selectedFriend.name">
-          </div>
+            <v-btn v-if="!selectedFriend" color="primary" dark v-on:click="displayAddFriend">
+                Anadir
+            </v-btn>
+        </h2>
 
-          <div>
-            <label>Raza</label>
-            <input type="text" v-model="selectedFriend.breed">
-          </div>
+        <v-form v-if="selectedFriend" class="mb-2">
+            <v-text-field
+                v-model="selectedFriend.name"
+                :counter="10"
+                label="Name"
+                required
+            ></v-text-field>
 
-          <div>
-            <label>Sexo</label>
-            <label>Macho</label><input type="radio" v-model="selectedFriend.gender" value="m">
-            <label>Hembra</label><input type="radio" v-model="selectedFriend.gender" value="f">
-          </div>
+            <v-text-field
+                v-model="selectedFriend.breed"
+                label="Raza"
+            ></v-text-field>
 
-          <div>
-            <label>Tamano</label>
-            <select v-model="selectedFriend.size">
-              <option value="small" default>Pequeno</option>
-              <option value="medium">Mediano</option>
-              <option value="big">Grande</option>
-            </select>
-          </div>
+            <v-radio-group v-model="selectedFriend.gender" label="Sexo">
+                <v-radio label="Macho" value="m"></v-radio>
+                <v-radio label="Hembra" value="f"></v-radio>
+            </v-radio-group>
 
-          <div>
-            <label>Fecha de nacimiento</label>
-            <input type="text" v-model="selectedFriend.birthdate">
-          </div>
+            <v-select v-model="selectedFriend.size"
+                :items="sizes"
+                label="Tamano"
+            ></v-select>
 
-          <div>
-            <label>Estado</label>
-            <select v-model="selectedFriend.state">
-              <option value="no_adopted">No adoptado</option>
-              <option value="adopted">Adoptado</option>
-            </select>
-          </div>
+            <v-text-field
+                v-model="selectedFriend.birthdate"
+                label="Fecha de nacimiento"
+            ></v-text-field>
 
-          <div>
-            <label>Descripcion</label>
-            <textarea v-model="selectedFriend.description"></textarea>
-          </div>
+            <v-select v-model="selectedFriend.state"
+                :items="states"
+                label="Estado"
+            ></v-select>
 
-          <button v-on:click="saveFriend(selectedFriend)">Guardar</button>
-          <button v-on:click="cancel">Cancel</button>
-        </div>
+            <v-textarea
+                v-model="selectedFriend.description"
+                label="Description"
+            ></v-textarea>
 
-        <table v-if="friendsCount">
-            <tr>
-                <th>Nombre</th>
-                <th>Raza</th>
-                <th>Sexo</th>
-                <th>Tamano</th>
-                <th>Fecha de nacimiento</th>
-                <th>Estado</th>
-                <th>Creado</th>
-                <th>Opciones</th>
-            </tr>
-            <tr v-for="friend of friends" v-bind:key="friend.id">
-                <td>{{ friend.name }}</td>
-                <td>{{ friend.breed }}</td>
-                <td><template v-if="friend.gender === 'm'">Macho</template><template v-else>Hembra</template></td>
-                <td>
-                  <template v-if="friend.size === 'small'">Pequeno</template>
-                  <template v-else-if="friend.size === 'medium'">Mediano</template>
-                  <template v-else>Grande</template>
-                </td>
-                <td>{{ friend.birthdate }}</td>
-                <td>
-                  <template v-if="friend.state === 'no_adopted'">No adoptado</template>
-                  <template v-else-if="friend.state === 'adopted'">Adoptado</template>
-                <td></td>
-                <td>
-                  <button v-on:click="viewFriend(friend.id)">Ver</button>
-                  <button v-on:click="deleteFriend(friend.id)">Eliminar</button>
-                </td>
-            </tr>
-        </table>
+            <v-btn color="primary" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
+            <v-btn v-on:click="cancel">Cancelar</v-btn>
+        </v-form>
+
+        <v-data-table v-if="friendsCount" :headers="headers" :items="friends">
+            <template v-slot:items="props">
+                <tr>
+                    <td>{{ props.item.name }}</td>
+                    <td>{{ props.item.breed }}</td>
+                    <td>
+                        <template v-if="props.item.gender === 'm'">Macho</template><template v-else>Hembra</template>
+                    </td>
+                    <td>
+                        <template v-if="props.item.size === 'small'">Pequeno</template>
+                        <template v-else-if="props.item.size === 'medium'">Mediano</template>
+                        <template v-else>Grande</template>
+                    </td>
+                    <td>{{ props.item.birthdate }}</td>
+                    <td>
+                        <template v-if="props.item.state === 'no_adopted'">No adoptado</template>
+                        <template v-else-if="props.item.state === 'adopted'">Adoptado</template>
+                    </td>
+                    <td> - </td>
+                    <td class="text-xs-right">
+                        <v-icon small class="mr-2" v-on:click="viewFriend(props.item.id)">
+                            edit
+                        </v-icon>
+                        <v-icon small class="mr-2" v-on:click="deleteFriend(props.item.id)">
+                            delete
+                        </v-icon>
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>
+
         <p v-else>There are not friends</p>
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -92,7 +91,27 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'AnimalShelter',
   data: function() {
-    return {}
+      return {
+        headers: [
+          { text: 'Nombre', value: 'name' },
+          { text: 'Raza', value: 'breed'  },
+          { text: 'Sexo', value: 'gender' },
+          { text: 'Tamano', value: 'size' },
+          { text: 'Fecha de nacimiento', value: 'birthdate' },
+          { text: 'Estado', value: 'state' },
+          { text: 'Creado', sortable: false },
+          { text: 'Opciones', sortable: false }
+        ],
+        sizes: [
+          { value: 'small', text: 'Pequeno' },
+          { value: 'medium', text: 'Mediano' },
+          { value: 'big', text: 'Grande' }
+        ],
+        states: [
+          { value: 'no_adopted', text: 'No adoptado' },
+          { value: 'adopted', text: 'Adoptado' }
+        ]
+      }
   },
   computed: {
     ...mapState('animalShelter', [ 'friends', 'selectedFriend' ]),
