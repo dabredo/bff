@@ -8,10 +8,11 @@
             </v-btn>
         </h2>
 
-        <v-form v-if="selectedFriend" class="mb-2">
+        <v-form v-if="selectedFriend" class="mb-2" v-model="valid">
             <v-text-field
                 v-model="selectedFriend.name"
-                :counter="10"
+                :counter="100"
+                :rules="nameRules"
                 label="Name"
                 required
             ></v-text-field>
@@ -19,6 +20,7 @@
             <v-text-field
                 v-model="selectedFriend.breed"
                 label="Raza"
+                required
             ></v-text-field>
 
             <v-radio-group v-model="selectedFriend.gender" label="Sexo">
@@ -43,10 +45,12 @@
 
             <v-textarea
                 v-model="selectedFriend.description"
+                :counter="1000"
+                :rules="descriptionRules"
                 label="Description"
             ></v-textarea>
 
-            <v-btn color="primary" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
+            <v-btn color="primary" :disabled="!valid" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
             <v-btn v-on:click="cancel">Cancelar</v-btn>
         </v-form>
 
@@ -110,7 +114,15 @@ export default {
         states: [
           { value: 'no_adopted', text: 'No adoptado' },
           { value: 'adopted', text: 'Adoptado' }
-        ]
+        ],
+        valid: true,
+        nameRules: [
+            v => !!v || 'Name is required',
+            v => (v && v.length <= 100) || 'Name must be less than 100 characters'
+        ],
+        descriptionRules: [
+            v => (v.length <= 1000) || 'Name must be less than 1000 characters'
+        ],
       }
   },
   computed: {
