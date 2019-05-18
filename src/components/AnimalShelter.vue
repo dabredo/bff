@@ -121,7 +121,7 @@ export default {
             v => (v && v.length <= 100) || 'Name must be less than 100 characters'
         ],
         descriptionRules: [
-            v => (v.length <= 1000) || 'Name must be less than 1000 characters'
+            v => (!v || v.length <= 1000) || 'Name must be less than 1000 characters'
         ],
       }
   },
