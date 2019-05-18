@@ -62,7 +62,7 @@
                 <th>Creado</th>
                 <th>Opciones</th>
             </tr>
-            <tr v-for="friend of friends" v-bind:key="friend">
+            <tr v-for="friend of friends" v-bind:key="friend.id">
                 <td>{{ friend.name }}</td>
                 <td>{{ friend.breed }}</td>
                 <td><template v-if="friend.gender === 'm'">Macho</template><template v-else>Hembra</template></td>
