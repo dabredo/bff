@@ -9,7 +9,7 @@ export const animalService = {
     getAll
 };
 
-let url = 'http://localhost:3000/animals';
+const url = 'http://localhost:3000/animals'
 
 function create(animal) {
   return axios.post(url, animal)
