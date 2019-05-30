@@ -1,21 +1,19 @@
 <template>
     <v-container>
         <h2 class="headline font-weight-bold mb-2">
-            Login
+            Registrarse
         </h2>
 
-        <LoginForm />
-
-        <v-btn flat to ="/registration">Crear una cuenta</v-btn>
+        <RegistrationForm />
     </v-container>
 </template>
 
 <script>
-  import LoginForm from '../components/LoginForm'
+  import RegistrationForm from '../components/RegistrationForm'
 
   export default {
     components: {
-      LoginForm
+      RegistrationForm
     }
   }
 </script>

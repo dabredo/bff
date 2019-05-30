@@ -3,7 +3,7 @@ import axios from 'axios'
 export const userService = {
     login,
     logout,
-    register
+    create
 };
 
 const url = 'http://localhost:3000/users'
@@ -12,7 +12,8 @@ function login(credentials) {
     return axios.post(url, credentials)
         .then(response => {
             if (response.user) {
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('user', JSON.stringify(response.user));
+
                 return response.user
             }
 
@@ -24,6 +25,6 @@ function logout() {
     localStorage.removeItem('user')
 }
 
-function register(user) {
+function create(user) {
     return axios.post(url, user)
 }

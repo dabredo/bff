@@ -5,6 +5,8 @@ import Home from './components/Home.vue'
 import Adoption from './components/Adoption.vue'
 import AnimalShelter from './components/AnimalShelter.vue'
 import Login from './views/Login.vue'
+import Registration from './views/Registration.vue'
+import Dashboard from './views/Dashboard.vue'
 
 Vue.use(Router)
 
@@ -13,8 +15,15 @@ const routes = [
   { path: '/adoption', component: Adoption },
   { path: '/animal-shelter', component: AnimalShelter },
   { path: '/login', component: Login },
-
-  { path: '/private', component: Home, meta: { requiresAuth: true } }, //TEST
+  { path: '/registration', component: Registration },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
+      layout: 'private'
+    }
+  }
 ]
 
 export const router = new Router({
