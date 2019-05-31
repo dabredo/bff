@@ -17,13 +17,21 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/registration', component: Registration },
   {
-    path: '/dashboard',
+    path: '/private/dashboard',
     component: Dashboard,
     meta: {
       requiresAuth: true,
       layout: 'private'
     }
-  }
+  },
+  {
+    path: '/private/animal-shelter',
+    component: AnimalShelter,
+    meta: {
+      requiresAuth: true,
+      layout: 'private'
+    }
+  },
 ]
 
 export const router = new Router({

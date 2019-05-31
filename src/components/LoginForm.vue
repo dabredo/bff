@@ -51,7 +51,7 @@ export default {
 
               this.$store.dispatch('user/login', credentials)
                 .then(()=> {
-                  this.$router.push('/dashboard')
+                  this.$router.push('/private/dashboard')
                 })
           }
         })

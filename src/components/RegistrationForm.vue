@@ -64,7 +64,7 @@ export default {
 
             this.$store.dispatch('user/register', user)
               .then(()=> {
-                this.$router.push('/dashboard')
+                this.$router.push('/private/dashboard')
               })
           }
         })
