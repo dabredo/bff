@@ -33,10 +33,28 @@
                 label="Tamano"
             ></v-select>
 
-            <v-text-field
-                v-model="selectedFriend.birthdate"
-                label="Fecha de nacimiento"
-            ></v-text-field>
+            <v-menu
+              v-model="menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+              >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="selectedFriend.birthdate"
+                  label="Fecha de nacimiento"
+                  prepend-icon="event"
+                  clearable
+                  readonly
+                  v-on="on"
+                  ></v-text-field>
+              </template>
+              <v-date-picker v-model="selectedFriend.birthdate" no-title  @input="menu = false"></v-date-picker>
+            </v-menu>
 
             <v-select v-model="selectedFriend.state"
                 :items="states"
@@ -96,6 +114,7 @@ export default {
   name: 'AnimalShelter',
   data: function() {
       return {
+        menu: false,
         headers: [
           { text: 'Nombre', value: 'name' },
           { text: 'Raza', value: 'breed'  },
