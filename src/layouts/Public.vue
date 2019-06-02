@@ -6,7 +6,7 @@
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat to ="/">Inicio</v-btn>
-        <v-btn flat to="/animal-shelter">Protectora de animales</v-btn>
+        <v-btn flat to="/adoption">Adopcion</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-btn flat to="/login">

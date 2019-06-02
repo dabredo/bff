@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Home from './components/Home.vue'
-import Adoption from './components/Adoption.vue'
 import AnimalShelter from './components/AnimalShelter.vue'
+import Adoption from './views/Adoption.vue'
+import AdoptionConfirmation from './views/AdoptionConfirmation.vue'
 import Login from './views/Login.vue'
 import Registration from './views/Registration.vue'
 import Dashboard from './views/Dashboard.vue'
@@ -32,6 +33,14 @@ const routes = [
       layout: 'private'
     }
   },
+  {
+    path: '/private/adoption/:animalId',
+    component: AdoptionConfirmation,
+    meta: {
+      requiresAuth: true,
+      layout: 'private'
+    }
+  },
 ]
 
 export const router = new Router({
@@ -39,11 +48,17 @@ export const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    const loggedIn = localStorage.getItem('user');
+  if (to.path !== '/login') {
+    localStorage.removeItem('path');
+  }
 
-    if (to.meta.requiresAuth && !loggedIn) {
-        next('/login')
-    } else {
-        next()
-    }
+  const loggedIn = localStorage.getItem('user');
+
+  if (to.meta.requiresAuth && !loggedIn) {
+    localStorage.setItem('path', to.path);
+
+    next('/login')
+  } else {
+    next()
+  }
 })

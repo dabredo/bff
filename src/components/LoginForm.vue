@@ -44,15 +44,20 @@ export default {
         .then(valid => {
 
           if (valid) {
-              let credentials = {
-                  email: email,
-                  password: password
-              }
+            let credentials = {
+              email: email,
+              password: password
+            }
 
-              this.$store.dispatch('user/login', credentials)
-                .then(()=> {
-                  this.$router.push('/private/dashboard')
-                })
+            this.$store.dispatch('user/login', credentials)
+              .then(()=> {
+                let toPath = localStorage.getItem('path')
+                if (!toPath) {
+                  toPath = '/private/dashboard'
+                }
+
+                this.$router.push(toPath)
+              })
           }
         })
     }

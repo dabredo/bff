@@ -1,11 +1,17 @@
 import { animalService } from '../services/animal.service'
+import { adoptionService } from '../services/adoption.service'
 
 export const animalShelter = {
   strict: true,
   namespaced: true,
   state: {
     friends: [],
-    selectedFriend: undefined
+    selectedFriend: undefined,
+    sizes: [
+      { value: 'small', text: 'Pequeno' },
+      { value: 'medium', text: 'Mediano' },
+      { value: 'big', text: 'Grande' }
+    ],
   },
   getters: {
     friendsCount: state => {
@@ -34,31 +40,43 @@ export const animalShelter = {
     }
   },
   actions: {
+    getAllNotAdopted ({ commit }, animalDetails) {
+      animalDetails.state = 'no_adopted'
+
+      return animalService.get(animalDetails)
+        .then(response => commit('getFriendsSuccess', response.data))
+    },
     getFriends ({ commit }) {
-      animalService.getAllByAnimalShelter()
+      return animalService.getAllByAnimalShelter()
         .then(response => commit('getFriendsSuccess', response.data))
     },
     getFriend({ commit }, friendId) {
-      animalService.getById(friendId)
+      return animalService.getById(friendId)
         .then(response => commit('getFriendSuccess', response.data))
     },
     createFriend({ commit, dispatch }, friend) {
-      animalService.create(friend)
+      return animalService.create(friend)
         .then(() => {
           dispatch('getFriends')
           .then(() => { commit('unselectFriend') });
         })
     },
     updateFriend({ commit , dispatch }, friend) {
-      animalService.update(friend)
+      return animalService.update(friend)
       .then(() => {
         dispatch('getFriends')
         .then(() => { commit('unselectFriend') });
       })
     },
     deleteFriend({ dispatch }, friendId) {
-      animalService.remove(friendId)
+      return animalService.remove(friendId)
         .then(() => dispatch('getFriends'))
+    },
+    createAdoptionRequest({ commit }, adoptionRequest) {
+      return adoptionService.create(adoptionRequest)
+    },
+    getAdoptions() {
+      return adoptionService.getAll()
     }
   }
 }

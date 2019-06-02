@@ -125,11 +125,6 @@ export default {
           { text: 'Creado', sortable: false },
           { text: 'Opciones', sortable: false }
         ],
-        sizes: [
-          { value: 'small', text: 'Pequeno' },
-          { value: 'medium', text: 'Mediano' },
-          { value: 'big', text: 'Grande' }
-        ],
         states: [
           { value: 'no_adopted', text: 'No adoptado' },
           { value: 'adopted', text: 'Adoptado' }
@@ -145,7 +140,7 @@ export default {
       }
   },
   computed: {
-    ...mapState('animalShelter', [ 'friends', 'selectedFriend' ]),
+    ...mapState('animalShelter', [ 'friends', 'selectedFriend', 'sizes' ]),
     ...mapGetters('animalShelter', [ 'friendsCount' ])
   },
   created () {

@@ -11,10 +11,10 @@ const url = 'http://localhost:3000/users'
 function login(credentials) {
     return axios.post(url, credentials)
         .then(response => {
-            if (response.user) {
-                localStorage.setItem('user', JSON.stringify(response.user));
+            if (response.data) {
+                localStorage.setItem('user', JSON.stringify(response.data));
 
-                return response.user
+                return response.data
             }
 
             return false

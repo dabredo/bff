@@ -6,7 +6,7 @@ export const animalService = {
     remove,
     getById,
     getAllByAnimalShelter,
-    getAll
+    get,
 };
 
 const url = 'http://localhost:3000/animals'
@@ -31,5 +31,25 @@ function getAllByAnimalShelter() {
   return axios.get(url)
 }
 
-function getAll() {
+function get(query) {
+  const params = new URLSearchParams();
+
+  if (query.state) {
+    params.append('state', query.state);
+  }
+
+  if (query.name) {
+    console.log(query.name)
+    params.append('name', query.name);
+  }
+
+  if (query.gender) {
+    params.append('gender', query.gender);
+  }
+
+  if (query.size) {
+    params.append('size', query.size.join());
+  }
+
+  return axios.get(url, { params })
 }

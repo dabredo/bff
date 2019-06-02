@@ -20,17 +20,17 @@ export const user = {
   },
   actions: {
     login({ commit }, credentials) {
-        userService.login(credentials)
-          .then((user) => {
-              commit('setUser', user)
-          })
+      return userService.login(credentials)
+        .then((user) => {
+          commit('setUser', user)
+        })
     },
     logout ({ commit }) {
-        userService.logout()
-        commit('removeUser')
+      commit('removeUser')
+      userService.logout()
     },
     register ({ dispatch }, user) {
-      userService.create(user)
+      return userService.create(user)
         .then(() => {
           dispatch('login', user)
         })
