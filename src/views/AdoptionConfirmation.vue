@@ -4,18 +4,21 @@
       Enviar solicitud de adopcion
     </h2>
 
-    <p>Name: {{ selectedFriend.name }}</p>
-    <p>Breed: {{ selectedFriend.breed }}</p>
-    <p>Gender: {{ selectedFriend.gender }}</p>
-    <p>Birthdate: {{ selectedFriend.birthdate }}</p>
-    <p>Description: {{ selectedFriend.description }}</p>
+    <div v-if="selectedFriend">
+      <p>Name: {{ selectedFriend.name }}</p>
+      <p>Breed: {{ selectedFriend.breed }}</p>
+      <p>Gender: {{ selectedFriend.gender }}</p>
+      <p>Size: {{ selectedFriend.size }}</p>
+      <p>Birthdate: {{ selectedFriend.birthdate }}</p>
+      <p>Description: {{ selectedFriend.description }}</p>
 
-    <v-btn color="primary" v-on:click="send(selectedFriend.id)">
-      Enviar
-    </v-btn>
-    <v-btn color="secondary" v-on:click="cancel()">
-      Cancelar
-    </v-btn>
+      <v-btn color="primary" v-on:click="send(selectedFriend.id)">
+        Enviar
+      </v-btn>
+      <v-btn color="secondary" v-on:click="cancel()">
+        Cancelar
+      </v-btn>
+    </div>
   </v-container>
 </template>
 
