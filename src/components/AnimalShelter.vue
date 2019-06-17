@@ -48,7 +48,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="selectedFriend.birthdate"
+                  :value="dateFormatted"
                   label="Fecha de nacimiento"
                   prepend-icon="event"
                   clearable
@@ -92,7 +92,7 @@
                         <template v-else-if="props.item.size === 'medium'">Mediano</template>
                         <template v-else>Grande</template>
                     </td>
-                    <td v-if="props.item.birthdate">{{ props.item.birthdate }}</td>
+                    <td v-if="props.item.birthdate">{{ props.item.birthdate | moment('DD/MM/YYYY') }}</td>
                     <td v-else>-</td>
                     <td>
                         <template v-if="props.item.state === 'not_adopted'">No adoptado</template>
@@ -142,7 +142,10 @@ export default {
   },
   computed: {
     ...mapState('animalShelter', [ 'friends', 'selectedFriend', 'sizes' ]),
-    ...mapGetters('animalShelter', [ 'friendsCount' ])
+    ...mapGetters('animalShelter', [ 'friendsCount' ]),
+    dateFormatted() {
+      return this.selectedFriend.birthdate ? this.$moment(this.selectedFriend.birthdate).format('DD/MM/YYYY') : ''
+    },
   },
   created () {
       this.$store.dispatch('animalShelter/getFriends');
