@@ -9,11 +9,14 @@
         <v-btn flat to="/adoption">Adopcion</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
+      <v-btn v-if="user" flat to="/private/dashboard">
+        <span class="">{{ user }}</span>
+      </v-btn>
       <v-btn v-if="user" v-on:click="logout()" flat>
-        <span class="mr-2">Logout</span>
+        <span class="">Logout</span>
       </v-btn>
       <v-btn v-else flat to="/login">
-        <span class="mr-2">Login</span>
+        <span class="">Login</span>
       </v-btn>
     </v-toolbar>
 

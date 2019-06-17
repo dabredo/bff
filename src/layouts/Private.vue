@@ -9,9 +9,11 @@
         <v-btn flat to="/private/animal-shelter">Protectora de animales</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-     {{ user }}
-      <v-btn flat v-on:click="logout()">
-        <span class="mr-2">Logout</span>
+      <v-btn v-if="user" disabled flat>
+        <span>{{ user }}</span>
+      </v-btn>
+      <v-btn v-if="user" v-on:click="logout()" flat>
+        <span>Logout</span>
       </v-btn>
     </v-toolbar>
 
