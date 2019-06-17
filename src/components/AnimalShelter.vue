@@ -72,6 +72,7 @@
                 data-vv-name="description"
                 data-vv-as="Descripcion"
                 label="Descripcion"
+                data-vv-validate-on="change"
             ></v-textarea>
 
             <v-btn color="primary" :disabled="!valid" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
