@@ -90,7 +90,7 @@
                         <template v-if="props.item.state === 'not_adopted'">No adoptado</template>
                         <template v-else-if="props.item.state === 'adopted'">Adoptado</template>
                     </td>
-                    <td>{{ props.item.createdAt }} </td>
+                    <td>{{ props.item.createdAt | moment('DD/MM/YYYY') }} </td>
                     <td class="text-xs-right">
                         <v-icon small class="mr-2" v-on:click="viewFriend(props.item.id)">
                             edit

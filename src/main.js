@@ -2,6 +2,7 @@ import Vue from 'vue'
 import './plugins/vuetify'
 import VeeValidate, { Validator } from 'vee-validate'
 import es from 'vee-validate/dist/locale/es';
+import VueMoment from 'vue-moment';
 import App from './App.vue'
 
 import auth from './plugins/auth'
@@ -15,6 +16,8 @@ import PublicLayout from './layouts/Public'
 
 Vue.component('public-layout', PublicLayout)
 Vue.component('private-layout', PrivateLayout)
+
+Vue.use(VueMoment)
 
 Vue.use(VeeValidate, {
   validity: false
