@@ -12,9 +12,12 @@
             <v-text-field
                 v-model="selectedFriend.name"
                 :counter="100"
-                :rules="nameRules"
-                label="Name"
-                required
+                v-validate="'required|max:100'"
+                :error-messages="errors.collect('name')"
+                data-vv-name="name"
+                data-vv-as="Nombre"
+                data-vv-validate-on="change"
+                label="Nombre"
             ></v-text-field>
 
             <v-text-field
@@ -42,7 +45,7 @@
               offset-y
               full-width
               min-width="290px"
-              >
+            >
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="selectedFriend.birthdate"
@@ -53,7 +56,7 @@
                   v-on="on"
                   ></v-text-field>
               </template>
-              <v-date-picker v-model="selectedFriend.birthdate" no-title  @input="menu = false"></v-date-picker>
+              <v-date-picker v-model="selectedFriend.birthdate" no-title @input="menu = false"></v-date-picker>
             </v-menu>
 
             <v-select v-model="selectedFriend.state"
@@ -64,12 +67,15 @@
             <v-textarea
                 v-model="selectedFriend.description"
                 :counter="1000"
-                :rules="descriptionRules"
-                label="Description"
+                v-validate="'max:1000'"
+                :error-messages="errors.collect('description')"
+                data-vv-name="description"
+                data-vv-as="Descripcion"
+                label="Descripcion"
             ></v-textarea>
 
             <v-btn color="primary" :disabled="!valid" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
-            <v-btn v-on:click="cancel">Cancelar</v-btn>
+            <v-btn v-on:click="cancel()">Cancelar</v-btn>
         </v-form>
 
         <v-data-table v-if="friendsCount" :headers="headers" :items="friends">
@@ -114,31 +120,24 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'AnimalShelter',
   data: function() {
-      return {
-        menu: false,
-        headers: [
-          { text: 'Nombre', value: 'name' },
-          { text: 'Raza', value: 'breed'  },
-          { text: 'Sexo', value: 'gender' },
-          { text: 'Tamano', value: 'size' },
-          { text: 'Fecha de nacimiento', value: 'birthdate' },
-          { text: 'Estado', value: 'state' },
-          { text: 'Creado', value: 'createdAt' },
-          { text: 'Opciones', sortable: false }
-        ],
-        states: [
-          { value: 'not_adopted', text: 'No adoptado' },
-          { value: 'adopted', text: 'Adoptado' }
-        ],
-        valid: true,
-        nameRules: [
-            v => !!v || 'Name is required',
-            v => (v && v.length <= 100) || 'Name must be less than 100 characters'
-        ],
-        descriptionRules: [
-            v => (!v || v.length <= 1000) || 'Name must be less than 1000 characters'
-        ],
-      }
+    return {
+      menu: false,
+      headers: [
+        { text: 'Nombre', value: 'name' },
+        { text: 'Raza', value: 'breed'  },
+        { text: 'Sexo', value: 'gender' },
+        { text: 'Tamano', value: 'size' },
+        { text: 'Fecha de nacimiento', value: 'birthdate' },
+        { text: 'Estado', value: 'state' },
+        { text: 'Creado', value: 'createdAt' },
+        { text: 'Opciones', sortable: false }
+      ],
+      states: [
+        { value: 'not_adopted', text: 'No adoptado' },
+        { value: 'adopted', text: 'Adoptado' }
+      ],
+      valid: true,
+    }
   },
   computed: {
     ...mapState('animalShelter', [ 'friends', 'selectedFriend', 'sizes' ]),
@@ -148,11 +147,16 @@ export default {
       this.$store.dispatch('animalShelter/getFriends');
   },
   methods: {
-    displayAddFriend() {
+    async displayAddFriend() {
       this.$store.commit('animalShelter/selectNewFriend')
     },
 
     async saveFriend(friend) {
+      let valid = await this.$validator.validate();
+      if (!valid) {
+        return;
+      }
+
       if (friend.id) {
         await this.$store.dispatch('animalShelter/updateFriend', friend)
       } else {
@@ -160,11 +164,11 @@ export default {
       }
     },
 
-    cancel() {
-        this.$store.commit('animalShelter/unselectFriend')
+    async cancel() {
+      this.$store.commit('animalShelter/unselectFriend')
     },
 
-    viewFriend(friendId) {
+    async viewFriend(friendId) {
       this.$store.dispatch('animalShelter/getFriend', friendId)
     },
 
