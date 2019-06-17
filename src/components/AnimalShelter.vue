@@ -85,7 +85,8 @@
                         <template v-else-if="props.item.size === 'medium'">Mediano</template>
                         <template v-else>Grande</template>
                     </td>
-                    <td>{{ props.item.birthdate }}</td>
+                    <td v-if="props.item.birthdate">{{ props.item.birthdate }}</td>
+                    <td v-else>-</td>
                     <td>
                         <template v-if="props.item.state === 'not_adopted'">No adoptado</template>
                         <template v-else-if="props.item.state === 'adopted'">Adoptado</template>
