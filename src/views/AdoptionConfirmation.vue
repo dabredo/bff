@@ -12,7 +12,7 @@
       <p>Birthdate: {{ selectedFriend.birthdate }}</p>
       <p>Description: {{ selectedFriend.description }}</p>
 
-      <v-btn color="primary" v-on:click="send(selectedFriend.id)">
+      <v-btn color="success" v-on:click="send(selectedFriend.id)">
         Enviar
       </v-btn>
       <v-btn color="secondary" v-on:click="cancel()">
@@ -40,19 +40,12 @@
       this.$store.dispatch('animalShelter/getFriend', animalId)
     },
     methods: {
-      send(animalId) {
-        let adoptionRequest = {
-          userId: this.user.id,
-          animalId: animalId
-        }
-
-        this.$store.dispatch('animalShelter/createAdoptionRequest', adoptionRequest)
-          .then(() => {
-            this.$router.push('/private/dashboard')
-          })
-      },
-      cancel() {
+      send: async function (animalId) {
+        await this.$store.dispatch('animalShelter/createAdoptionRequest', animalId)
         this.$router.push('/private/dashboard')
+      },
+      cancel: function() {
+        this.$router.push('/adoption')
       }
     }
   }

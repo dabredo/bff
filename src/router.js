@@ -14,7 +14,6 @@ Vue.use(Router)
 const routes = [
   { path: '/', component: Home },
   { path: '/adoption', component: Adoption },
-  { path: '/animal-shelter', component: AnimalShelter },
   { path: '/login', component: Login },
   { path: '/registration', component: Registration },
   {
@@ -47,17 +46,28 @@ export const router = new Router({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
-    localStorage.removeItem('path');
-  }
+router.beforeEach(async (to, from, next) => {
+  let auth = await Vue.$auth1
+  const loggedIn = await auth.auth.isLoggedIn()
 
-  const loggedIn = localStorage.getItem('user');
+  if (to.path == '/login') {
+    localStorage.setItem('path', '/private/dashboard');
+
+    return auth.auth.login('/#/private/dashboard')
+  }
 
   if (to.meta.requiresAuth && !loggedIn) {
     localStorage.setItem('path', to.path);
 
-    next('/login')
+    return auth.auth.login(to.path)
+  }
+
+  //Hack to redirect after login
+  const path = localStorage.getItem('path');
+  localStorage.removeItem('path');
+
+  if (path) {
+    next(path)
   } else {
     next()
   }

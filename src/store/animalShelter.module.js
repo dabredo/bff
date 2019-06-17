@@ -5,6 +5,7 @@ export const animalShelter = {
   strict: true,
   namespaced: true,
   state: {
+    adoptions: [],
     friends: [],
     selectedFriend: undefined,
     sizes: [
@@ -32,51 +33,71 @@ export const animalShelter = {
         gender: 'm',
         size: 'small',
         birthdate: '',
-        state: 'no_adopted',
+        state: 'not_adopted',
       }
     } ,
     unselectFriend (state) {
       state.selectedFriend = undefined
-    }
+    },
+    getAdoptionsSuccess (state, adoptions) {
+      state.adoptions = adoptions
+    },
   },
   actions: {
-    getAllNotAdopted ({ commit }, animalDetails) {
-      animalDetails.state = 'no_adopted'
+    async getAllNotAdopted ({ commit }, animalDetails) {
+      animalDetails.state = 'not_adopted'
 
-      return animalService.get(animalDetails)
-        .then(response => commit('getFriendsSuccess', response.data))
-    },
-    getFriends ({ commit }) {
-      return animalService.getAllByAnimalShelter()
-        .then(response => commit('getFriendsSuccess', response.data))
-    },
-    getFriend({ commit }, friendId) {
-      return animalService.getById(friendId)
-        .then(response => commit('getFriendSuccess', response.data))
-    },
-    createFriend({ commit, dispatch }, friend) {
-      return animalService.create(friend)
-        .then(() => {
-          dispatch('getFriends')
-          .then(() => { commit('unselectFriend') });
-        })
-    },
-    updateFriend({ commit , dispatch }, friend) {
-      return animalService.update(friend)
-      .then(() => {
-        dispatch('getFriends')
-        .then(() => { commit('unselectFriend') });
+      let res = await animalService.get(animalDetails)
+      res.finished(result => {
+        commit('getFriendsSuccess', result)
       })
     },
-    deleteFriend({ dispatch }, friendId) {
-      return animalService.remove(friendId)
-        .then(() => dispatch('getFriends'))
+    async getFriends ({ commit }) {
+      let res = await animalService.getAllByAnimalShelter()
+      res.started(result => {
+        commit('getFriendsSuccess', result)
+      })
+      .updated(result => {
+        commit('getFriendsSuccess', result)
+      })
     },
-    createAdoptionRequest({ commit }, adoptionRequest) {
-      return adoptionService.create(adoptionRequest)
+    async getFriend({ commit }, friendId) {
+      let getFriend = await animalService.getById(friendId)
+
+      getFriend.finished(friend => {
+        commit('getFriendSuccess', friend)
+      })
     },
-    getAdoptions() {
-      return adoptionService.getAll()
+    async createFriend({ commit }, friend) {
+      await animalService.create(friend)
+      commit('unselectFriend')
+    },
+    async updateFriend({ commit }, friend) {
+      await animalService.update(friend)
+      commit('unselectFriend')  // NOT NEEDED
+    },
+    async deleteFriend({ commit }, friendId) {
+      await animalService.remove(friendId)
+      commit('unselectFriend')  // NOT NEEDED
+    },
+    createAdoptionRequest({ commit }, animalId) {
+      return adoptionService.create(animalId)
+    },
+    approveAdoptionRequest({ commit }, request) {
+      return adoptionService.approve(request.animalId, request.userId)
+    },
+    declineAdoptionRequest({ commit }, request) {
+      return adoptionService.decline(request.animalId, request.userId)
+    },
+    async getAdoptions({ commit }) {
+      let res = await adoptionService.getAll()
+
+      res.started(result => {
+        commit('getAdoptionsSuccess', result)
+      })
+      .updated(result => {
+        commit('getAdoptionsSuccess', result)
+      })
     }
   }
 }

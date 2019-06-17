@@ -87,10 +87,10 @@
                     </td>
                     <td>{{ props.item.birthdate }}</td>
                     <td>
-                        <template v-if="props.item.state === 'no_adopted'">No adoptado</template>
+                        <template v-if="props.item.state === 'not_adopted'">No adoptado</template>
                         <template v-else-if="props.item.state === 'adopted'">Adoptado</template>
                     </td>
-                    <td> - </td>
+                    <td>{{ props.item.createdAt }} </td>
                     <td class="text-xs-right">
                         <v-icon small class="mr-2" v-on:click="viewFriend(props.item.id)">
                             edit
@@ -122,11 +122,11 @@ export default {
           { text: 'Tamano', value: 'size' },
           { text: 'Fecha de nacimiento', value: 'birthdate' },
           { text: 'Estado', value: 'state' },
-          { text: 'Creado', sortable: false },
+          { text: 'Creado', value: 'createdAt' },
           { text: 'Opciones', sortable: false }
         ],
         states: [
-          { value: 'no_adopted', text: 'No adoptado' },
+          { value: 'not_adopted', text: 'No adoptado' },
           { value: 'adopted', text: 'Adoptado' }
         ],
         valid: true,
@@ -151,11 +151,11 @@ export default {
       this.$store.commit('animalShelter/selectNewFriend')
     },
 
-    saveFriend(friend) {
+    async saveFriend(friend) {
       if (friend.id) {
-        this.$store.dispatch('animalShelter/updateFriend', friend)
+        await this.$store.dispatch('animalShelter/updateFriend', friend)
       } else {
-        this.$store.dispatch('animalShelter/createFriend', friend)
+        await this.$store.dispatch('animalShelter/createFriend', friend)
       }
     },
 

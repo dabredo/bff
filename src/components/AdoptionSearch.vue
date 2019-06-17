@@ -48,6 +48,7 @@
         </v-card-title>
 
         <v-card-text>
+          <p>{{ friend.user }}</p>
           <pre>{{ friend.description }}</pre>
         </v-card-text>
 
@@ -55,6 +56,10 @@
           <v-btn color="secondary" v-on:click="adopt(friend.id)">Adoptar</v-btn>
         </v-card-actions>
       </v-card>
+    </div>
+
+    <div v-if="!friends.length">
+      <p>No hay resultados para esta busqueda</p>
     </div>
   </div>
 </template>

@@ -9,7 +9,10 @@
         <v-btn flat to="/adoption">Adopcion</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-btn flat to="/login">
+      <v-btn v-if="user" v-on:click="logout()" flat>
+        <span class="mr-2">Logout</span>
+      </v-btn>
+      <v-btn v-else flat to="/login">
         <span class="mr-2">Login</span>
       </v-btn>
     </v-toolbar>
@@ -19,3 +22,21 @@
     </v-content>
   </v-app>
 </template>
+
+<script>
+  import { mapState } from 'vuex';
+
+  export default {
+    computed: {
+      ...mapState('user', [ 'user' ])
+    },
+    created () {
+      this.$store.dispatch('user/isLoggedIn')
+    },
+    methods: {
+      logout() {
+        this.$store.dispatch('user/logout')
+      }
+    }
+  }
+</script>

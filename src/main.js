@@ -4,6 +4,9 @@ import VeeValidate, { Validator } from 'vee-validate'
 import es from 'vee-validate/dist/locale/es';
 import App from './App.vue'
 
+import auth from './plugins/auth'
+Vue.use(auth)
+
 import { router } from './router'
 import { store } from './store'
 

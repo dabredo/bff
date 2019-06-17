@@ -1,54 +1,44 @@
-import axios from 'axios'
+import Vue from 'vue'
 
 export const adoptionService = {
     create,
-    // update,
-    // remove,
-    // getById,
-    // get,
+    approve,
+    decline,
     getAll
 };
 
-const url = 'http://localhost:3000/adoptions'
+async function create(animalId) {
+  let app = await Vue.$auth1
 
-function create(adoption) {
-  return axios.post(url, adoption)
+  return await app.shelterManagment
+    .friend(animalId)
+    .requestAdoption()
+    .failed(err => console.error('error', err))
 }
 
-function getAll() {
-  return axios.get(url)
+async function approve(animalId, userId) {
+  let app = await Vue.$auth1
+
+  return await app.shelterManagment
+    .friend(animalId)
+    .approveAdoption({ userId: userId })
+    .failed(err => console.error('error', err))
 }
 
-// function update(animal) {
-//   return axios.put(url + '/' + animal.id, animal)
-// }
+async function decline(animalId, userId) {
+  let app = await Vue.$auth1
 
-// function remove(id) {
-//   return axios.delete(url + '/' + id)
-// }
+  return await app.shelterManagment
+    .friend(animalId)
+    .declineAdoption({ userId: userId })
+    .failed(err => console.error('error', err))
+}
 
-// function getById(id) {
-//   return axios.get(url + '/' + id)
-// }
+async function getAll() {
+  let app = await Vue.$auth1
 
-// function get(query) {
-//   const params = new URLSearchParams();
-
-//   if (query.state) {
-//     params.append('state', query.state);
-//   }
-
-//   if (query.name) {
-//     params.append('name', query.name);
-//   }
-
-//   if (query.gender) {
-//     params.append('gender', query.gender);
-//   }
-
-//   if (query.size) {
-//     params.append('size', query.size.join());
-//   }
-
-//   return axios.get(url, { params })
-// }
+  return app.lists.adoptions
+    .readAndObserve({
+    orderBy: { createdAt: 'ascending' }
+  })
+}

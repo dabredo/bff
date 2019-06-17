@@ -9,6 +9,7 @@
         <v-btn flat to="/private/animal-shelter">Protectora de animales</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
+     {{ user }}
       <v-btn flat v-on:click="logout()">
         <span class="mr-2">Logout</span>
       </v-btn>
@@ -21,14 +22,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
-  data: function() {
-      return {}
+  computed: {
+    ...mapState('user', [ 'user' ])
   },
   methods: {
-    logout() {
-      this.$store.dispatch('user/logout')
+    async logout() {
+      await this.$store.dispatch('user/logout')
       this.$router.push('/')
     }
   }
