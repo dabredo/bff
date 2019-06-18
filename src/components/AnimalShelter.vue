@@ -166,6 +166,8 @@ export default {
       } else {
         await this.$store.dispatch('animalShelter/createFriend', friend)
       }
+
+      this.$store.commit('notification/displaySuccess', "Friend was saved")
     },
 
     async cancel() {
@@ -176,11 +178,12 @@ export default {
       this.$store.dispatch('animalShelter/getFriend', friendId)
     },
 
-    deleteFriend(friendId) {
+    async deleteFriend(friendId) {
       if (confirm('Are you sure?')) {
         this.cancel()
 
-        this.$store.dispatch('animalShelter/deleteFriend', friendId)
+         await this.$store.dispatch('animalShelter/deleteFriend', friendId)
+         this.$store.commit('notification/displaySuccess', "Friend was removed")
       }
     }
   }
