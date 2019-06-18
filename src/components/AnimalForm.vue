@@ -7,7 +7,6 @@
       :error-messages="errors.collect('name')"
       data-vv-name="name"
       data-vv-as="Nombre"
-      data-vv-validate-on="change"
       label="Nombre"
     ></v-text-field>
 
@@ -113,6 +112,7 @@ export default {
     },
 
     async cancel() {
+      this.$validator.detach("name");
       this.$store.commit('animalShelter/unselectFriend')
     },
   }
