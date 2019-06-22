@@ -9,7 +9,7 @@ export const notification = {
   mutations: {
     displayError (state, message) {
       state.message = message
-      state.type = 'errouccess'
+      state.type = 'error'
       state.display = true
     },
     displaySuccess (state, message) {
