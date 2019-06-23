@@ -1,5 +1,6 @@
-import wolkenkit from 'wolkenkit-client'
 import Vue from 'vue'
+import wolkenkit from 'wolkenkit-client'
+import DepotClient from 'wolkenkit-depot-client';
 
 export default {
   install: function() {
@@ -13,7 +14,7 @@ export default {
             clientId: '',
             scope: 'profile',
             strictMode: false,
-            redirectUrl: 'http://localhost:8081/#/private/dashboard'
+            redirectUrl: ''
           })
         }).catch((error) => {console.log(error)})
 
@@ -24,8 +25,15 @@ export default {
           window.location.href = '';
         })
 
+        app.image = new DepotClient({
+          host: 'local.wolkenkit.io',
+          port: 3001,
+          token: app.auth.getToken()
+        })
+
         return app;
       })()
+
     } catch (error) {
         console.log('ERROR', error)
     }

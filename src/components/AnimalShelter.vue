@@ -94,6 +94,8 @@ export default {
       if (confirm('Are you sure?')) {
         this.$store.commit('animalShelter/unselectFriend')
 
+        //TODO: Delete images of deleted friends
+
         await this.$store.dispatch('animalShelter/deleteFriend', friendId)
         this.$store.commit('notification/displaySuccess', "Friend was removed")
       }

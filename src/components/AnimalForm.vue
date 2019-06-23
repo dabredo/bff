@@ -69,6 +69,31 @@
       data-vv-validate-on="change"
     ></v-textarea>
 
+    <v-btn block color="warning" @click='uploadImage' prepend-icon='attach_file'>Anadir imagen
+      <v-icon dark right>add_a_photo</v-icon>
+    </v-btn>
+    <input
+      type="file"
+      style="display: none"
+      ref="image"
+      accept="image/*"
+      @change="onImageUpload"
+    >
+
+    <v-container fluid>
+      <v-layout row wrap>
+        <v-flex xs12 sm6 md4 lg3  v-for="(image, index) in selectedImages" v-bind:key="index">
+          <v-card v-if="image.url">
+            <v-img :src="image.url" :alt="image.name"></v-img>
+            <v-card-title>{{ image.name }}</v-card-title>
+            <v-card-actions>
+              <v-btn flat v-on:click="deleteImage(index)">Borrar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+
     <v-btn color="primary" :disabled="!valid" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
     <v-btn v-on:click="cancel()">Cancelar</v-btn>
   </v-form>
@@ -76,11 +101,13 @@
 
 <script>
 import { mapState } from 'vuex';
+import Vue from 'vue';
 
 export default {
   name: 'AnimalForm',
   data: function() {
     return {
+     // images: [],
       valid: true,
       menu: false,
       states: [
@@ -90,16 +117,95 @@ export default {
     }
   },
   computed: {
-    ...mapState('animalShelter', [ 'selectedFriend', 'sizes' ]),
+    ...mapState('animalShelter', [ 'selectedFriend', 'sizes', 'selectedImages' ]),
     dateFormatted() {
       return this.selectedFriend.birthdate ? this.$moment(this.selectedFriend.birthdate).format('DD/MM/YYYY') : ''
     },
   },
   methods: {
+    deleteImage(index) {
+      this.selectedImages.splice(index, 1);
+    },
+    uploadImage () {
+      this.$refs.image.click ()
+    },
+    async onImageUpload (event) {
+      const file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+      const pattern = /image.(png|jpe?g|gif|svg)/;
+
+      if (file === undefined) {
+          this.$store.commit('notification/displayError', 'La imagen no se pude anadir')
+          return
+      }
+
+      if (!file.type.match(pattern)) {
+        this.$store.commit('notification/displayError', 'Los formatos de imagen permitidos son png, jpg, gif y svg')
+        return
+      }
+
+      if (file.size > 1048576) {
+        this.$store.commit('notification/displayError', 'La imagen es demasiado grande')
+        return
+      }
+
+      const fr = new FileReader()
+      fr.readAsDataURL(file)
+
+      fr.addEventListener('load', () => {
+        this.selectedImages.push({
+          url: fr.result,
+          file: file,
+          name: file.name,
+        })
+
+        this.$store.commit('notification/displaySuccess', 'La imagen se ha anadido correctamente')
+      })
+    },
     async saveFriend(friend) {
       let valid = await this.$validator.validate();
       if (!valid) {
         return;
+      }
+
+      let app = await Vue.$auth1;
+
+      for (let i = 0; i < friend.images.length; i++) {
+        let image = friend.images[i]
+
+        let found = this.selectedImages.find((value) => {
+          return value.id === image.id
+        })
+
+        if (!found) {
+          await app.image.removeFile({
+            id: image.id
+          });
+        }
+      }
+
+      friend.images = [];
+
+      for (let i = 0; i < this.selectedImages.length; i++) {
+        let image = this.selectedImages[i]
+        if (image.id === undefined) {
+
+          const id = await app.image.addFile({
+            content: image.file,
+            fileName: image.name,
+            isAuthorized: {
+              queries: {
+                getFile: { forAuthenticated: true, forPublic: true  }
+              }
+            }
+          })
+
+          image.id = id
+        }
+
+        await friend.images.push({
+          id: image.id,
+          name: image.name
+        })
       }
 
       if (friend.id) {

@@ -4,21 +4,71 @@
       Enviar solicitud de adopcion
     </h2>
 
-    <div v-if="selectedFriend">
-      <p>Name: {{ selectedFriend.name }}</p>
-      <p>Breed: {{ selectedFriend.breed }}</p>
-      <p>Gender: {{ selectedFriend.gender }}</p>
-      <p>Size: {{ selectedFriend.size }}</p>
-      <p>Birthdate: {{ selectedFriend.birthdate }}</p>
-      <p>Description: {{ selectedFriend.description }}</p>
+    <v-card v-if="selectedFriend">
+      <v-card-text>
+        <v-layout row wrap>
+          <v-flex sm5>
+            <v-list dense>
+              <v-list-tile>
+                <v-list-tile-title class="font-weight-bold">Name:</v-list-tile-title>
+                <v-list-tile-sub-title>{{ selectedFriend.name }}</v-list-tile-sub-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-title class="font-weight-bold">Fecha de nacimiento:</v-list-tile-title>
+                <v-list-tile-sub-title>{{ selectedFriend.birthdate }}</v-list-tile-sub-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-title class="font-weight-bold">Raza:</v-list-tile-title>
+                <v-list-tile-sub-title>{{ selectedFriend.breed }}</v-list-tile-sub-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-title class="font-weight-bold">Sexo:</v-list-tile-title>
+                <v-list-tile-sub-title>
+                  <span v-if="selectedFriend.gender == 'm'">Macho</span>
+                  <span v-else-if="selectedFriend.gender == 'f'">Hembra</span>
+                </v-list-tile-sub-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-title class="font-weight-bold">Tamano:</v-list-tile-title>
+                <v-list-tile-sub-title>
+                  <span v-if="selectedFriend.size">{{ selectedFriend.size }}</span>
+                </v-list-tile-sub-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-title></v-list-tile-title>
+                <v-list-tile-sub-title class="font-weight-bold">{{ selectedFriend.user }}</v-list-tile-sub-title>
+              </v-list-tile>
+            </v-list>
+          </v-flex>
 
-      <v-btn color="success" v-on:click="send(selectedFriend.id)">
-        Enviar
-      </v-btn>
-      <v-btn color="secondary" v-on:click="cancel()">
-        Cancelar
-      </v-btn>
-    </div>
+          <v-flex offset-sm1 sm6 mt-3>
+            <pre class="caption">{{ selectedFriend.description }}</pre>
+          </v-flex>
+        </v-layout>
+      </v-card-text>
+
+      <v-form>
+        <v-container fluid>
+          <v-layout wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="(image, index) in selectedImages" v-bind:key="index">
+              <v-card v-if="image.url">
+                <v-img :src="image.url" :alt="image.name"></v-img>
+                <v-card-title>{{ image.name }}</v-card-title>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-form>
+
+      <v-card-actions>
+        <v-btn color="success" v-on:click="send(selectedFriend.id)">
+          Enviar
+        </v-btn>
+        <v-btn color="secondary" v-on:click="cancel()">
+          Cancelar
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
@@ -31,7 +81,7 @@
       }
     },
     computed: {
-      ...mapState('animalShelter', [ 'selectedFriend' ]),
+      ...mapState('animalShelter', [ 'selectedFriend', 'selectedImages' ]),
       ...mapState('user', [ 'user' ]),
     },
     created () {

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { animalService } from '../services/animal.service'
 import { adoptionService } from '../services/adoption.service'
 
@@ -7,6 +8,7 @@ export const animalShelter = {
   state: {
     adoptions: [],
     friends: [],
+    selectedImages: [],
     selectedFriend: undefined,
     sizes: [
       { value: 'small', text: 'Pequeno' },
@@ -20,6 +22,9 @@ export const animalShelter = {
     }
   },
   mutations: {
+    selectImages (state, images) {
+      state.selectedImages = images;
+    },
     getFriendsSuccess (state, friends) {
       state.friends = friends
     },
@@ -28,16 +33,18 @@ export const animalShelter = {
     },
     selectNewFriend (state) {
       state.selectedFriend = {
-        name: '',
+        // name: '',
         breed: '',
         gender: 'm',
         size: 'small',
         birthdate: '',
         state: 'not_adopted',
+        images: []
       }
     } ,
     unselectFriend (state) {
       state.selectedFriend = undefined
+      state.selectedImages = []
     },
     getAdoptionsSuccess (state, adoptions) {
       state.adoptions = adoptions
@@ -48,7 +55,21 @@ export const animalShelter = {
       animalDetails.state = 'not_adopted'
 
       let res = await animalService.get(animalDetails)
-      res.finished(result => {
+      res.finished(async (result) => {
+        let app = await Vue.$auth1
+
+        for (let i = 0; i < result.length; i++) {
+          if (result[i].images.length) {
+            let image = result[i].images[0]
+
+            const file = await app.image.getFile({
+              id: image.id
+            })
+
+            image.url = await file.asDataUrl();
+          }
+        }
+
         commit('getFriendsSuccess', result)
       })
     },
@@ -64,7 +85,23 @@ export const animalShelter = {
     async getFriend({ commit }, friendId) {
       let getFriend = await animalService.getById(friendId)
 
-      getFriend.finished(friend => {
+      let images = [];
+      await getFriend.finished(async (friend) => {
+        let app = await Vue.$auth1
+
+        await friend.images.forEach(async (image) => {
+          const file = await app.image.getFile({
+            id: image.id
+          });
+
+          images.push({
+            'id': image.id,
+            'url': await file.asDataUrl(),
+            'name': image.name,
+          })
+        })
+
+        commit('selectImages', images)
         commit('getFriendSuccess', friend)
       })
     },

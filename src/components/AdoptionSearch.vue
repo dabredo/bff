@@ -35,26 +35,55 @@
     </v-form>
 
     <div v-for="friend of friends" :key="friend.id">
-      <v-card class="mb-2">
-        <v-card-title primary-title>
-          <div>
-            <div class="headline">{{ friend.name }} <span v-if="friend.breed">({{ friend.breed }})</span></div>
-            <span v-if="friend.birthdate" class="grey--text mr-4">{{ friend.birthdate }}</span>
-            <span class="grey--text">
-              <span v-if="friend.gender == 'm'">Macho</span>
-              <span v-else-if="friend.gender == 'f'">Hembra</span>
-            </span>
-          </div>
-        </v-card-title>
+      <v-card>
+        <v-layout mb-2 pb-2 pt-2 pl-2>
+          <v-flex xs5>
+            <v-img v-if="friend.images.length" height="230"  :src="friend.images[0].url"></v-img>
+          </v-flex>
 
-        <v-card-text>
-          <p>{{ friend.user }}</p>
-          <pre>{{ friend.description }}</pre>
-        </v-card-text>
+          <v-flex xs9>
+            <v-card-title>
+              <div class="headline">{{ friend.name }}</div>
+              <v-layout justify-end v-if="friend.birthdate" class="grey--text">
+                {{ friend.birthdate }}
+              </v-layout>
+            </v-card-title>
 
-        <v-card-actions>
-          <v-btn color="secondary" v-on:click="adopt(friend.id)">Adoptar</v-btn>
-        </v-card-actions>
+            <v-layout row>
+            <v-flex xs6>
+              <v-list dense>
+                <v-list-tile>
+                  <v-list-tile-title class="font-weight-bold">Raza:</v-list-tile-title>
+                  <v-list-tile-sub-title>{{ friend.breed }}</v-list-tile-sub-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-title class="font-weight-bold">Sexo:</v-list-tile-title>
+                  <v-list-tile-sub-title>
+                    <span v-if="friend.gender == 'm'">Macho</span>
+                    <span v-else-if="friend.gender == 'f'">Hembra</span>
+                  </v-list-tile-sub-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-title class="font-weight-bold">Tamano:</v-list-tile-title>
+                  <v-list-tile-sub-title>
+                    <span v-if="friend.size">{{ friend.size }}</span>
+                  </v-list-tile-sub-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-title></v-list-tile-title>
+                  <v-list-tile-sub-title class="font-weight-bold">{{ friend.user }}</v-list-tile-sub-title>
+                </v-list-tile>
+              </v-list>
+            </v-flex>
+
+            <v-flex>
+              <v-layout justify-end align-end fill-height>
+                  <v-btn class="mb-0" color="secondary" v-on:click="adopt(friend.id)">Adoptar</v-btn>
+              </v-layout>
+            </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
       </v-card>
     </div>
 
