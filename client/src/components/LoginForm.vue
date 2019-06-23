@@ -41,7 +41,7 @@ export default {
   methods: {
     login(email, password) {
       this.$validator.validate()
-        .then(valid => {
+      .then(valid => {
 
           if (valid) {
             let credentials = {
@@ -56,7 +56,7 @@ export default {
                   toPath = '/private/dashboard'
                 }
 
-                this.$router.push(toPath)
+//                this.$router.push(toPath)
               })
           }
         })

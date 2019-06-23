@@ -19,3 +19,12 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Node.js folders
+*coverage/
+
+# Build artefacts
+*build/
+
+# OS generated files and folders
+.DS_Store
