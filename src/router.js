@@ -50,6 +50,12 @@ router.beforeEach(async (to, from, next) => {
   let auth = await Vue.$auth1
   const loggedIn = await auth.auth.isLoggedIn()
 
+  //XXX: Redirect from auth0
+  if (to.path == '/logout') {
+    localStorage.removeItem('path');
+    next('/')
+  }
+
   if (to.path == '/login') {
     localStorage.setItem('path', '/private/dashboard');
 
