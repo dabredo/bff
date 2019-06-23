@@ -15,7 +15,7 @@
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-title class="font-weight-bold">Fecha de nacimiento:</v-list-tile-title>
-                <v-list-tile-sub-title>{{ selectedFriend.birthdate }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ selectedFriend.birthdate | moment('DD/MM/YYYY') }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-title class="font-weight-bold">Raza:</v-list-tile-title>

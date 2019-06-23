@@ -45,7 +45,7 @@
             <v-card-title>
               <div class="headline">{{ friend.name }}</div>
               <v-layout justify-end v-if="friend.birthdate" class="grey--text">
-                {{ friend.birthdate }}
+                {{ friend.birthdate | moment('DD/MM/YYYY') }}
               </v-layout>
             </v-card-title>
 
