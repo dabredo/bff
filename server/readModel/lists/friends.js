@@ -14,9 +14,14 @@ const fields = {
 };
 
 const projections = {
-  'shelterManagment.friend.added' (friends, event) {
+  async 'shelterManagment.friend.added' (friends, event, { app }) {
+    const animalShelter = await app.lists.accounts.readOne({
+      where: { user: event.data.user }
+    });
+
     friends.add({
       user: event.data.user,
+      animalShelter: animalShelter.name,
       name: event.data.name,
       size: event.data.size,
       gender: event.data.gender,

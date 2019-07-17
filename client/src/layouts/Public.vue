@@ -10,7 +10,7 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-btn v-if="user" flat to="/private/dashboard">
-        <span class="">{{ user }}</span>
+        <span class="">{{ user.email }}</span>
       </v-btn>
       <v-btn v-if="user" v-on:click="logout()" flat>
         <span class="">Logout</span>
@@ -32,9 +32,6 @@
   export default {
     computed: {
       ...mapState('user', [ 'user' ])
-    },
-    created () {
-      this.$store.dispatch('user/isLoggedIn')
     },
     methods: {
       logout() {

@@ -1,41 +1,28 @@
 import Vue from 'vue'
 
-async function create(animal) {
+export const accountService = {
+    register,
+    getByUserId
+};
+
+async function register(account) {
   let app = await Vue.$auth1
 
-  return await app.shelterManagment
-    .friend()
-    .add(animal)
+    console.log(account)
+
+  return await app.userManagment
+    .account()
+    .register(account)
     .failed(err => console.error('error', err))
-}
-
-async function update(animal) {
-  let app = await Vue.$auth1
-
-  return await app.shelterManagment
-    .friend(animal.id)
-    .update(animal)
-    .failed(err => console.error(err))
-}
-
-async function remove(id) {
-  let app = await Vue.$auth1
-
-  return await app.shelterManagment.friend(id).delete()
-    .failed(err => console.error(err))
 }
 
 async function getByUserId(userId) {
   let app = await Vue.$auth1
 
-  return await app.lists.accounts.readOne({
-      where: { id: userId }
-  })
+  return await app
+    .lists
+    .accounts
+    .readOne({
+      where: { user: userId }
+    })
 }
-
-export const animalService = {
-    create,
-    update,
-    remove,
-    getByUserId,
-};

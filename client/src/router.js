@@ -40,6 +40,14 @@ const routes = [
       layout: 'private'
     }
   },
+  {
+    path: '/private/adoption',
+    component: Adoption,
+    meta: {
+      requiresAuth: true,
+      layout: 'private'
+    }
+  },
 ]
 
 export const router = new Router({

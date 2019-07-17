@@ -71,7 +71,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-title></v-list-tile-title>
-                  <v-list-tile-sub-title class="font-weight-bold">{{ friend.user }}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title class="font-weight-bold">{{ friend.animalShelter }}</v-list-tile-sub-title>
                 </v-list-tile>
               </v-list>
             </v-flex>
