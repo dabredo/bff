@@ -1,31 +1,44 @@
 <template>
-  <v-form v-if="selectedFriend" class="mb-2" v-model="valid">
+  <v-form
+    v-if="selectedFriend"
+    v-model="valid"
+    class="mb-2"
+  >
     <v-text-field
       v-model="selectedFriend.name"
-      :counter="100"
       v-validate="'required|max:100'"
+      :counter="100"
       :error-messages="errors.collect('name')"
       data-vv-name="name"
       data-vv-as="Nombre"
       label="Nombre"
-    ></v-text-field>
+    />
 
     <v-text-field
       v-model="selectedFriend.breed"
       label="Raza"
       required
-    ></v-text-field>
+    />
 
-    <v-radio-group v-model="selectedFriend.gender" label="Sexo">
-      <v-radio label="Macho" value="m"></v-radio>
-      <v-radio label="Hembra" value="f"></v-radio>
+    <v-radio-group
+      v-model="selectedFriend.gender"
+      label="Sexo"
+    >
+      <v-radio
+        label="Macho"
+        value="m"
+      />
+      <v-radio
+        label="Hembra"
+        value="f"
+      />
     </v-radio-group>
 
     <v-select
       v-model="selectedFriend.size"
       :items="sizes"
       label="Tamano"
-    ></v-select>
+    />
 
     <v-menu
       v-model="menu"
@@ -45,59 +58,80 @@
           clearable
           readonly
           v-on="on"
-        ></v-text-field>
+        />
       </template>
       <v-date-picker
         v-model="selectedFriend.birthdate"
         no-title
         @input="menu = false"
-      ></v-date-picker>
+      />
     </v-menu>
 
     <v-select
       v-model="selectedFriend.state"
       :items="states"
       label="Estado"
-    ></v-select>
+    />
 
     <v-textarea
       v-model="selectedFriend.description"
-      :counter="1000"
       v-validate="'max:1000'"
+      :counter="1000"
       :error-messages="errors.collect('description')"
       data-vv-name="description"
       data-vv-as="Descripcion"
       label="Descripcion"
       data-vv-validate-on="change"
-    ></v-textarea>
-
-    <v-btn block color="warning" @click="uploadImage" prepend-icon="attach_file"
-      >Anadir imagen
-      <v-icon dark right>add_a_photo</v-icon>
-    </v-btn>
-    <input
-      type="file"
-      style="display: none"
-      ref="image"
-      accept="image/*"
-      @change="onImageUpload"
     />
 
+    <v-btn
+      block
+      color="warning"
+      prepend-icon="attach_file"
+      @click="uploadImage"
+    >
+      Anadir imagen
+      <v-icon
+        dark
+        right
+      >
+        add_a_photo
+      </v-icon>
+    </v-btn>
+    <input
+      ref="image"
+      type="file"
+      style="display: none"
+      accept="image/*"
+      @change="onImageUpload"
+    >
+
     <v-container fluid>
-      <v-layout row wrap>
+      <v-layout
+        row
+        wrap
+      >
         <v-flex
+          v-for="(image, index) in selectedImages"
+          :key="index"
           xs12
           sm6
           md4
           lg3
-          v-for="(image, index) in selectedImages"
-          v-bind:key="index"
         >
           <v-card v-if="image.url">
-            <v-img :src="image.url" :alt="image.name"></v-img>
+            <v-img
+              :src="image.url"
+              :alt="image.name"
+            />
             <v-card-title>{{ image.name }}</v-card-title>
             <v-card-actions>
-              <v-btn flat v-on:click="deleteImage(index)">Borrar</v-btn>
+              <v-btn
+                flat
+                @click="deleteImage(index)"
+              >
+                Borrar
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -107,11 +141,14 @@
     <v-btn
       color="primary"
       :disabled="!valid"
-      v-on:click="saveFriend(selectedFriend)"
       class="primar"
-      >Guardar</v-btn
+      @click="saveFriend(selectedFriend)"
     >
-    <v-btn v-on:click="cancel()">Cancelar</v-btn>
+      Guardar
+    </v-btn>
+    <v-btn @click="cancel()">
+      Cancelar
+    </v-btn>
   </v-form>
 </template>
 

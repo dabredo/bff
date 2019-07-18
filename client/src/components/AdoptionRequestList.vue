@@ -3,16 +3,19 @@
     <h3>Adoptions</h3>
 
     <v-list>
-      <v-list-tile v-for="adoption in adoptions" :key="adoption.id">
+      <v-list-tile
+        v-for="adoption in adoptions"
+        :key="adoption.id"
+      >
         <v-list-tile-content>
-          <v-list-tile-title
-            >Usuario: {{ adoption.username }} -
-            {{ adoption.createdAt | moment("DD/MM/YYYY") }}</v-list-tile-title
-          >
-          <v-list-tile-sub-title
-            >Animal:{{ adoption.animalName }} -
-            {{ adoption.state }}</v-list-tile-sub-title
-          >
+          <v-list-tile-title>
+            Usuario: {{ adoption.username }} -
+            {{ adoption.createdAt | moment("DD/MM/YYYY") }}
+          </v-list-tile-title>
+          <v-list-tile-sub-title>
+            Animal:{{ adoption.animalName }} -
+            {{ adoption.state }}
+          </v-list-tile-sub-title>
         </v-list-tile-content>
 
         <v-list-tile-action>
@@ -20,9 +23,10 @@
           <v-btn
             v-else
             color="success"
-            v-on:click="approveRequest(adoption.animalId, adoption.user)"
-            >Aceptar</v-btn
+            @click="approveRequest(adoption.animalId, adoption.user)"
           >
+            Aceptar
+          </v-btn>
         </v-list-tile-action>
 
         <v-list-tile-action class="ml-2">
@@ -30,9 +34,10 @@
           <v-btn
             v-else
             color="error"
-            v-on:click="declineRequest(adoption.animalId, adoption.user)"
-            >Decline</v-btn
+            @click="declineRequest(adoption.animalId, adoption.user)"
           >
+            Decline
+          </v-btn>
         </v-list-tile-action>
       </v-list-tile>
     </v-list>

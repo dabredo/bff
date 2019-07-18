@@ -7,7 +7,7 @@
         v-if="!selectedFriend"
         color="primary"
         dark
-        v-on:click="displayAddFriend"
+        @click="displayAddFriend"
       >
         Anadir
       </v-btn>
@@ -15,47 +15,75 @@
 
     <AnimalForm />
 
-    <v-data-table v-if="friendsCount" :headers="headers" :items="friends">
+    <v-data-table
+      v-if="friendsCount"
+      :headers="headers"
+      :items="friends"
+    >
       <template v-slot:items="props">
         <tr>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.breed }}</td>
           <td>
-            <template v-if="props.item.gender === 'm'"
-              >Macho</template
-            ><template v-else
-              >Hembra</template
+            <template
+              v-if="props.item.gender === 'm'"
             >
+              Macho
+            </template><template
+              v-else
+            >
+              Hembra
+            </template>
           </td>
           <td>
-            <template v-if="props.item.size === 'small'"
-              >Pequeno</template
+            <template
+              v-if="props.item.size === 'small'"
             >
-            <template v-else-if="props.item.size === 'medium'"
-              >Mediano</template
+              Pequeno
+            </template>
+            <template
+              v-else-if="props.item.size === 'medium'"
             >
-            <template v-else
-              >Grande</template
+              Mediano
+            </template>
+            <template
+              v-else
             >
+              Grande
+            </template>
           </td>
           <td v-if="props.item.birthdate">
             {{ props.item.birthdate | moment("DD/MM/YYYY") }}
           </td>
-          <td v-else>-</td>
+          <td v-else>
+            -
+          </td>
           <td>
-            <template v-if="props.item.state === 'not_adopted'"
-              >No adoptado</template
+            <template
+              v-if="props.item.state === 'not_adopted'"
             >
-            <template v-else-if="props.item.state === 'adopted'"
-              >Adoptado</template
+              No adoptado
+            </template>
+            <template
+              v-else-if="props.item.state === 'adopted'"
             >
+              Adoptado
+            </template>
           </td>
           <td>{{ props.item.createdAt | moment("DD/MM/YYYY") }}</td>
           <td class="text-xs-right">
-            <v-icon small class="mr-2" v-on:click="viewFriend(props.item.id)">
+            <v-icon
+              small
+              class="mr-2"
+              @click="viewFriend(props.item.id)"
+            >
               edit
             </v-icon>
-            <v-icon small class="mr-2" v-on:click="deleteFriend(props.item.id)">
+            <v-icon
+              small
+              class="mr-2"
+              @click="deleteFriend(props.item.id)"
+            >
               delete
             </v-icon>
           </td>
@@ -63,7 +91,9 @@
       </template>
     </v-data-table>
 
-    <p v-else>There are not friends</p>
+    <p v-else>
+      There are not friends
+    </p>
   </v-container>
 </template>
 
@@ -73,10 +103,10 @@ import { mapState, mapGetters } from "vuex";
 import AnimalForm from "../components/AnimalForm";
 
 export default {
+  name: "AnimalShelter",
   components: {
     AnimalForm
   },
-  name: "AnimalShelter",
   data: function() {
     return {
       headers: [

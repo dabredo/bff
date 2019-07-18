@@ -6,7 +6,12 @@
 
     <LoginForm />
 
-    <v-btn flat to="/registration">Crear una cuenta</v-btn>
+    <v-btn
+      flat
+      to="/registration"
+    >
+      Crear una cuenta
+    </v-btn>
   </v-container>
 </template>
 

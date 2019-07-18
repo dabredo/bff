@@ -6,7 +6,7 @@
 
     <AdoptionRequestList
       v-if="user.type === 'animal-shelter'"
-    ></AdoptionRequestList>
+    />
     <div v-else>
       <p>Espacio personal</p>
     </div>

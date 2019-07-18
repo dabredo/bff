@@ -1,5 +1,8 @@
 <template>
-  <v-form class="mb-2" v-model="valid">
+  <v-form
+    v-model="valid"
+    class="mb-2"
+  >
     <v-text-field
       v-model="email"
       v-validate="'required|max:200|email'"
@@ -8,27 +11,28 @@
       data-vv-as="Email"
       label="Email"
       required
-    ></v-text-field>
+    />
 
     <v-text-field
       v-model="password"
       v-validate="'required'"
       :append-icon="show ? 'visibility' : 'visibility_off'"
-      @click:append="show = !show"
       :type="show ? 'text' : 'password'"
       :error-messages="errors.collect('password')"
       data-vv-name="password"
       data-vv-as="Password"
       label="Password"
       required
-    ></v-text-field>
+      @click:append="show = !show"
+    />
 
     <v-btn
       color="primary"
       :disabled="!valid"
-      v-on:click="login(email, password)"
-      >Aceptar</v-btn
+      @click="login(email, password)"
     >
+      Aceptar
+    </v-btn>
   </v-form>
 </template>
 

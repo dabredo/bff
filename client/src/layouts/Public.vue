@@ -5,23 +5,45 @@
         <span>Best friends</span>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat to="/">Inicio</v-btn>
-        <v-btn flat to="/adoption">Adopcion</v-btn>
+        <v-btn
+          flat
+          to="/"
+        >
+          Inicio
+        </v-btn>
+        <v-btn
+          flat
+          to="/adoption"
+        >
+          Adopcion
+        </v-btn>
       </v-toolbar-items>
-      <v-spacer></v-spacer>
-      <v-btn v-if="user" flat to="/private/dashboard">
+      <v-spacer />
+      <v-btn
+        v-if="user"
+        flat
+        to="/private/dashboard"
+      >
         <span class="">{{ user.email }}</span>
       </v-btn>
-      <v-btn v-if="user" v-on:click="logout()" flat>
+      <v-btn
+        v-if="user"
+        flat
+        @click="logout()"
+      >
         <span class="">Logout</span>
       </v-btn>
-      <v-btn v-else flat to="/login">
+      <v-btn
+        v-else
+        flat
+        to="/login"
+      >
         <span class="">Login</span>
       </v-btn>
     </v-toolbar>
 
     <v-content>
-      <router-view></router-view>
+      <router-view />
     </v-content>
   </v-app>
 </template>
