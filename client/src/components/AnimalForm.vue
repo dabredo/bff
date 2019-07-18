@@ -236,8 +236,6 @@ export default {
         return;
       }
 
-      let app = await Vue.$auth1;
-
       for (let i = 0; i < friend.images.length; i++) {
         let image = friend.images[i];
 
@@ -246,7 +244,7 @@ export default {
         });
 
         if (!found) {
-          await app.image.removeFile({
+           await appImage.removeFile({
             id: image.id
           });
         }
@@ -257,7 +255,7 @@ export default {
       for (let i = 0; i < this.selectedImages.length; i++) {
         let image = this.selectedImages[i];
         if (image.id === undefined) {
-          const id = await app.image.addFile({
+          const id = await appImage.addFile({
             content: image.file,
             fileName: image.name,
             isAuthorized: {

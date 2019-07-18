@@ -4,42 +4,62 @@ import DepotClient from "wolkenkit-depot-client";
 
 export default {
   install: function() {
-    try {
-      Vue.$auth1 = (async function() {
-        let app = await wolkenkit
-          .connect({
-            host: "",
-            port: 3000,
-            authentication: new wolkenkit.authentication.OpenIdConnect({
-              identityProviderUrl: "",
-              clientId: "",
-              scope: "profile",
-              strictMode: false,
-              redirectUrl: ""
-            })
+    Vue.$app = (async function() {
+      return await wolkenkit
+        .connect({
+          host: "",
+          port: 3000,
+          authentication: new wolkenkit.authentication.OpenIdConnect({
+            identityProviderUrl: "",
+            clientId: "",
+            scope: "",
+            strictMode: false,
+            redirectUrl: ""
           })
-          .catch(error => {
-            console.log(error);
-          });
-
-        app.logout = async function() {
-          let auth = await app.auth;
-          auth.logout();
-
-          window.location.href =
-            "";
-        };
-
-        app.image = new DepotClient({
-          host: "local.wolkenkit.io",
-          port: 3001,
-          token: app.auth.getToken()
+        })
+        .catch(error => {
+          console.log(error);
         });
+    })();
 
-        return app;
-      })();
-    } catch (error) {
-      console.log("ERROR", error);
-    }
+    Vue.$image = (async function() {
+      const app = await Vue.$app;
+
+      return new DepotClient({
+        host: "",
+        port: 3001,
+        token: app.auth.getToken()
+      });
+    })();
+
+    Vue.$auth = {};
+
+    Vue.$auth.isLoggedIn = async function() {
+      const app = await Vue.$app
+      return app.auth.isLoggedIn();
+    };
+
+    Vue.$auth.getLoggedUserId = async function() {
+      const app = await Vue.$app
+      return app.auth.getProfile().sub;
+    };
+
+    Vue.$auth.getLoggedUsername = async function() {
+      const app = await Vue.$app
+      return app.auth.getProfile().name;
+    };
+
+    Vue.$auth.logout = async function() {
+      const app = await Vue.$app
+      app.auth.logout();
+
+      window.location.href =
+        "";
+    };
+
+    Vue.$auth.login = async function(path) {
+      const app = await Vue.$app
+      app.auth.login(path);
+    };
   }
 };

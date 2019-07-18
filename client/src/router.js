@@ -55,9 +55,6 @@ export const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  let auth = await Vue.$auth1;
-  const loggedIn = await auth.auth.isLoggedIn();
-
   //XXX: Redirect from auth0
   if (to.path == "/logout") {
     localStorage.removeItem("path");
@@ -67,13 +64,13 @@ router.beforeEach(async (to, from, next) => {
   if (to.path == "/login") {
     localStorage.setItem("path", "/private/dashboard");
 
-    return auth.auth.login("/#/private/dashboard");
+    return await Vue.$auth.login("/#/private/dashboard");
   }
 
-  if (to.meta.requiresAuth && !loggedIn) {
+  if (to.meta.requiresAuth && !await Vue.$auth.isLoggedIn()) {
     localStorage.setItem("path", to.path);
 
-    return auth.auth.login(to.path);
+    return await Vue.$auth.login(to.path);
   }
 
   //Hack to redirect after login

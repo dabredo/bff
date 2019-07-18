@@ -6,9 +6,7 @@ export const accountService = {
 };
 
 async function register(account) {
-  let app = await Vue.$auth1;
-
-  console.log(account);
+  const app = await Vue.$app;
 
   return await app.userManagment
     .account()
@@ -17,7 +15,7 @@ async function register(account) {
 }
 
 async function getByUserId(userId) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.lists.accounts.readOne({
     where: { user: userId }

@@ -8,7 +8,7 @@ export const adoptionService = {
 };
 
 async function create(animalId) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.shelterManagment
     .friend(animalId)
@@ -17,7 +17,7 @@ async function create(animalId) {
 }
 
 async function approve(animalId, userId) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.shelterManagment
     .friend(animalId)
@@ -26,7 +26,7 @@ async function approve(animalId, userId) {
 }
 
 async function decline(animalId, userId) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.shelterManagment
     .friend(animalId)
@@ -35,7 +35,7 @@ async function decline(animalId, userId) {
 }
 
 async function getAll() {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return app.lists.adoptions.readAndObserve({
     orderBy: { createdAt: "ascending" }

@@ -21,17 +21,17 @@ export const user = {
   },
   actions: {
     async isLoggedIn({ commit }) {
-      let auth = await Vue.$auth1;
-      if (auth.auth.isLoggedIn()) {
+      if (await Vue.$auth.isLoggedIn()) {
         //GET TYPE
-        let userId = auth.auth.getProfile().sub;
+        let userId = await Vue.$auth.getLoggedUserId();
+        let username = await Vue.$auth.getLoggedUsername();
 
         let result = await accountService.getByUserId(userId);
         await result
           .finished(result => {
             commit("setUser", {
               id: userId,
-              email: auth.auth.getProfile().name,
+              email: username,
               type: result.type
             });
           })
@@ -41,7 +41,7 @@ export const user = {
 
         commit("setUser", {
           id: userId,
-          email: auth.auth.getProfile().name,
+          email: username,
           type: null
         });
       }
@@ -52,12 +52,10 @@ export const user = {
       });
     },
     async logout({ commit }) {
-      let auth = await Vue.$auth1;
-
       userService.logout();
       commit("removeUser");
 
-      auth.logout();
+      await Vue.$auth.logout();
     },
     register({ dispatch }, user) {
       return userService.create(user).then(() => {
@@ -67,12 +65,12 @@ export const user = {
     async registerAccount({ commit }, account) {
       await accountService.register(account);
 
-      let auth = await Vue.$auth1;
-      let userId = auth.auth.getProfile().sub;
+      let userId = await Vue.$auth.getLoggedUserId();
+      let username = await Vue.$auth.getLoggedUsername();
 
       commit("setUser", {
         id: userId,
-        email: auth.auth.getProfile().name,
+        email: username,
         type: account.type
       });
     }

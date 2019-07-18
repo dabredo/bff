@@ -56,13 +56,13 @@ export const animalShelter = {
 
       let res = await animalService.get(animalDetails);
       res.finished(async result => {
-        let app = await Vue.$auth1;
+        const appImage = await Vue.$image;
 
         for (let i = 0; i < result.length; i++) {
           if (result[i].images.length) {
             let image = result[i].images[0];
 
-            const file = await app.image.getFile({
+            const file = await appImage.getFile({
               id: image.id
             });
 
@@ -88,10 +88,10 @@ export const animalShelter = {
 
       let images = [];
       await getFriend.finished(async friend => {
-        let app = await Vue.$auth1;
+        const appImage = await Vue.$image;
 
         await friend.images.forEach(async image => {
-          const file = await app.image.getFile({
+          const file = await appImage.getFile({
             id: image.id
           });
 

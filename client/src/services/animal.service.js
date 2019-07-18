@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 async function create(animal) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.shelterManagment
     .friend()
@@ -10,7 +10,7 @@ async function create(animal) {
 }
 
 async function update(animal) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.shelterManagment
     .friend(animal.id)
@@ -19,7 +19,7 @@ async function update(animal) {
 }
 
 async function remove(id) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.shelterManagment
     .friend(id)
@@ -28,7 +28,7 @@ async function remove(id) {
 }
 
 async function getById(id) {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   return await app.lists.friends.readOne({
     where: { id: id }
@@ -36,12 +36,13 @@ async function getById(id) {
 }
 
 async function getAllByAnimalShelter() {
-  let app = await Vue.$auth1;
+  const app = await Vue.$app;
 
   //TODO: Do it in backend
   let where = {
     user: app.auth.getProfile().sub
   };
+
 
   return app.lists.friends.readAndObserve({
     where: where,
@@ -50,8 +51,6 @@ async function getAllByAnimalShelter() {
 }
 
 async function get(query) {
-  let app = await Vue.$auth1;
-
   let where = {};
   if (query.state) {
     where.state = query.state;
@@ -68,6 +67,8 @@ async function get(query) {
   if (query.size) {
     where.size = query.size;
   }
+
+  const app = await Vue.$app;
 
   return app.lists.friends.read({
     where: where,
