@@ -9,11 +9,11 @@
 </template>
 
 <script>
-  import AdoptionSearch from '../components/AdoptionSearch'
+import AdoptionSearch from "../components/AdoptionSearch";
 
-  export default {
-    components: {
-      AdoptionSearch
-    }
+export default {
+  components: {
+    AdoptionSearch
   }
+};
 </script>

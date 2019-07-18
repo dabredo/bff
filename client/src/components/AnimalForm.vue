@@ -21,7 +21,8 @@
       <v-radio label="Hembra" value="f"></v-radio>
     </v-radio-group>
 
-    <v-select v-model="selectedFriend.size"
+    <v-select
+      v-model="selectedFriend.size"
       :items="sizes"
       label="Tamano"
     ></v-select>
@@ -44,7 +45,7 @@
           clearable
           readonly
           v-on="on"
-          ></v-text-field>
+        ></v-text-field>
       </template>
       <v-date-picker
         v-model="selectedFriend.birthdate"
@@ -53,7 +54,8 @@
       ></v-date-picker>
     </v-menu>
 
-    <v-select v-model="selectedFriend.state"
+    <v-select
+      v-model="selectedFriend.state"
       :items="states"
       label="Estado"
     ></v-select>
@@ -69,7 +71,8 @@
       data-vv-validate-on="change"
     ></v-textarea>
 
-    <v-btn block color="warning" @click='uploadImage' prepend-icon='attach_file'>Anadir imagen
+    <v-btn block color="warning" @click="uploadImage" prepend-icon="attach_file"
+      >Anadir imagen
       <v-icon dark right>add_a_photo</v-icon>
     </v-btn>
     <input
@@ -78,11 +81,18 @@
       ref="image"
       accept="image/*"
       @change="onImageUpload"
-    >
+    />
 
     <v-container fluid>
       <v-layout row wrap>
-        <v-flex xs12 sm6 md4 lg3  v-for="(image, index) in selectedImages" v-bind:key="index">
+        <v-flex
+          xs12
+          sm6
+          md4
+          lg3
+          v-for="(image, index) in selectedImages"
+          v-bind:key="index"
+        >
           <v-card v-if="image.url">
             <v-img :src="image.url" :alt="image.name"></v-img>
             <v-card-title>{{ image.name }}</v-card-title>
@@ -94,72 +104,94 @@
       </v-layout>
     </v-container>
 
-    <v-btn color="primary" :disabled="!valid" v-on:click="saveFriend(selectedFriend)" class="primar">Guardar</v-btn>
+    <v-btn
+      color="primary"
+      :disabled="!valid"
+      v-on:click="saveFriend(selectedFriend)"
+      class="primar"
+      >Guardar</v-btn
+    >
     <v-btn v-on:click="cancel()">Cancelar</v-btn>
   </v-form>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Vue from 'vue';
+import { mapState } from "vuex";
+import Vue from "vue";
 
 export default {
-  name: 'AnimalForm',
+  name: "AnimalForm",
   data: function() {
     return {
-     // images: [],
+      // images: [],
       valid: true,
       menu: false,
       states: [
-        { value: 'not_adopted', text: 'No adoptado' },
-        { value: 'adopted', text: 'Adoptado' }
-      ],
-    }
+        { value: "not_adopted", text: "No adoptado" },
+        { value: "adopted", text: "Adoptado" }
+      ]
+    };
   },
   computed: {
-    ...mapState('animalShelter', [ 'selectedFriend', 'sizes', 'selectedImages' ]),
+    ...mapState("animalShelter", ["selectedFriend", "sizes", "selectedImages"]),
     dateFormatted() {
-      return this.selectedFriend.birthdate ? this.$moment(this.selectedFriend.birthdate).format('DD/MM/YYYY') : ''
-    },
+      return this.selectedFriend.birthdate
+        ? this.$moment(this.selectedFriend.birthdate).format("DD/MM/YYYY")
+        : "";
+    }
   },
   methods: {
     deleteImage(index) {
       this.selectedImages.splice(index, 1);
     },
-    uploadImage () {
-      this.$refs.image.click ()
+    uploadImage() {
+      this.$refs.image.click();
     },
-    async onImageUpload (event) {
-      const file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+    async onImageUpload(event) {
+      const file = event.dataTransfer
+        ? event.dataTransfer.files[0]
+        : event.target.files[0];
       const pattern = /image.(png|jpe?g|gif|svg)/;
 
       if (file === undefined) {
-          this.$store.commit('notification/displayError', 'La imagen no se pude anadir')
-          return
+        this.$store.commit(
+          "notification/displayError",
+          "La imagen no se pude anadir"
+        );
+        return;
       }
 
       if (!file.type.match(pattern)) {
-        this.$store.commit('notification/displayError', 'Los formatos de imagen permitidos son png, jpg, gif y svg')
-        return
+        this.$store.commit(
+          "notification/displayError",
+          "Los formatos de imagen permitidos son png, jpg, gif y svg"
+        );
+        return;
       }
 
       if (file.size > 1048576) {
-        this.$store.commit('notification/displayError', 'La imagen es demasiado grande')
-        return
+        this.$store.commit(
+          "notification/displayError",
+          "La imagen es demasiado grande"
+        );
+        return;
       }
 
-      const fr = new FileReader()
-      fr.readAsDataURL(file)
+      const fr = new FileReader();
+      fr.readAsDataURL(file);
 
-      fr.addEventListener('load', () => {
+      fr.addEventListener("load", () => {
         this.selectedImages.push({
           url: fr.result,
           file: file,
-          name: file.name,
-        })
+          name: file.name
+        });
 
-        this.$store.commit('notification/displaySuccess', 'La imagen se ha anadido correctamente')
-      })
+        this.$store.commit(
+          "notification/displaySuccess",
+          "La imagen se ha anadido correctamente"
+        );
+      });
     },
     async saveFriend(friend) {
       let valid = await this.$validator.validate();
@@ -170,11 +202,11 @@ export default {
       let app = await Vue.$auth1;
 
       for (let i = 0; i < friend.images.length; i++) {
-        let image = friend.images[i]
+        let image = friend.images[i];
 
-        let found = this.selectedImages.find((value) => {
-          return value.id === image.id
-        })
+        let found = this.selectedImages.find(value => {
+          return value.id === image.id;
+        });
 
         if (!found) {
           await app.image.removeFile({
@@ -186,41 +218,40 @@ export default {
       friend.images = [];
 
       for (let i = 0; i < this.selectedImages.length; i++) {
-        let image = this.selectedImages[i]
+        let image = this.selectedImages[i];
         if (image.id === undefined) {
-
           const id = await app.image.addFile({
             content: image.file,
             fileName: image.name,
             isAuthorized: {
               queries: {
-                getFile: { forAuthenticated: true, forPublic: true  }
+                getFile: { forAuthenticated: true, forPublic: true }
               }
             }
-          })
+          });
 
-          image.id = id
+          image.id = id;
         }
 
         await friend.images.push({
           id: image.id,
           name: image.name
-        })
+        });
       }
 
       if (friend.id) {
-        await this.$store.dispatch('animalShelter/updateFriend', friend)
+        await this.$store.dispatch("animalShelter/updateFriend", friend);
       } else {
-        await this.$store.dispatch('animalShelter/createFriend', friend)
+        await this.$store.dispatch("animalShelter/createFriend", friend);
       }
 
-      this.$store.commit('notification/displaySuccess', "Friend was saved")
+      this.$store.commit("notification/displaySuccess", "Friend was saved");
     },
 
     async cancel() {
       this.$validator.detach("name");
-      this.$store.commit('animalShelter/unselectFriend')
-    },
+      this.$store.commit("animalShelter/unselectFriend");
+    }
   }
-}
+};
 </script>

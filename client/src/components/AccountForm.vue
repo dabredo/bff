@@ -9,9 +9,13 @@
       :counter="200"
       label="Nombre completo"
       required
-      ></v-text-field>
+    ></v-text-field>
 
-    <v-switch v-model="isAnimalShelter" class="ma-2" label="Soy una casa de adopction"></v-switch>
+    <v-switch
+      v-model="isAnimalShelter"
+      class="ma-2"
+      label="Soy una casa de adopction"
+    ></v-switch>
 
     <div v-if="isAnimalShelter">
       <h2>Detalles de la casa de adopcion</h2>
@@ -25,7 +29,7 @@
         :counter="200"
         label="CIF"
         required
-        ></v-text-field>
+      ></v-text-field>
 
       <v-text-field
         v-model="name"
@@ -36,7 +40,7 @@
         :counter="200"
         label="Nombre"
         required
-        ></v-text-field>
+      ></v-text-field>
 
       <v-text-field
         v-model="address"
@@ -47,46 +51,49 @@
         :counter="200"
         label="Direcction"
         required
-        ></v-text-field>
+      ></v-text-field>
     </div>
 
-    <v-btn color="primary" :disabled="!valid" v-on:click="register(fullname, name, cif, address, isAnimalShelter)">Aceptar</v-btn>
+    <v-btn
+      color="primary"
+      :disabled="!valid"
+      v-on:click="register(fullname, name, cif, address, isAnimalShelter)"
+      >Aceptar</v-btn
+    >
   </v-form>
 </template>
 
 <script>
 export default {
-  name: 'AccountForm',
+  name: "AccountForm",
   data: function() {
-      return {
-        fullname: '',
-        name: '',
-        cif: '',
-        address: '',
-        isAnimalShelter: false,
-        valid: false,
-      }
+    return {
+      fullname: "",
+      name: "",
+      cif: "",
+      address: "",
+      isAnimalShelter: false,
+      valid: false
+    };
   },
   methods: {
     register(fullname, name, cif, address, isAnimalShelter) {
-      this.$validator.validate()
-        .then(valid => {
-          if (valid) {
-            let user = {
-              fullname: fullname,
-              cif: cif,
-              name: name,
-              address: address,
-              type: isAnimalShelter ? 'animal-shelter' : 'user'
-            }
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          let user = {
+            fullname: fullname,
+            cif: cif,
+            name: name,
+            address: address,
+            type: isAnimalShelter ? "animal-shelter" : "user"
+          };
 
-            this.$store.dispatch('user/registerAccount', user)
-              .then(() => {
-                this.$router.push('/private/dashboard')
-              })
-          }
-        })
+          this.$store.dispatch("user/registerAccount", user).then(() => {
+            this.$router.push("/private/dashboard");
+          });
+        }
+      });
     }
   }
-}
+};
 </script>

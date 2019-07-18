@@ -3,23 +3,22 @@ export const notification = {
   namespaced: true,
   state: {
     display: false,
-    message: '',
-    type: ''
+    message: "",
+    type: ""
   },
   mutations: {
-    displayError (state, message) {
-      state.message = message
-      state.type = 'error'
-      state.display = true
+    displayError(state, message) {
+      state.message = message;
+      state.type = "error";
+      state.display = true;
     },
-    displaySuccess (state, message) {
-      state.message = message
-      state.type = 'success'
-      state.display = true
+    displaySuccess(state, message) {
+      state.message = message;
+      state.type = "success";
+      state.display = true;
     },
     close(state) {
-      state.display = false
+      state.display = false;
     }
-
   }
-}
+};

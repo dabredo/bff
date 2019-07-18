@@ -1,9 +1,9 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
-import { animalShelter } from './animalShelter.module'
-import { user } from './user.module'
-import { notification } from './notification.module'
+import { animalShelter } from "./animalShelter.module";
+import { user } from "./user.module";
+import { notification } from "./notification.module";
 
 Vue.use(Vuex);
 

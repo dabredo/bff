@@ -10,33 +10,53 @@
           <v-flex sm5>
             <v-list dense>
               <v-list-tile>
-                <v-list-tile-title class="font-weight-bold">Name:</v-list-tile-title>
-                <v-list-tile-sub-title>{{ selectedFriend.name }}</v-list-tile-sub-title>
+                <v-list-tile-title class="font-weight-bold"
+                  >Name:</v-list-tile-title
+                >
+                <v-list-tile-sub-title>{{
+                  selectedFriend.name
+                }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title class="font-weight-bold">Fecha de nacimiento:</v-list-tile-title>
-                <v-list-tile-sub-title>{{ selectedFriend.birthdate | moment('DD/MM/YYYY') }}</v-list-tile-sub-title>
+                <v-list-tile-title class="font-weight-bold"
+                  >Fecha de nacimiento:</v-list-tile-title
+                >
+                <v-list-tile-sub-title>{{
+                  selectedFriend.birthdate | moment("DD/MM/YYYY")
+                }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title class="font-weight-bold">Raza:</v-list-tile-title>
-                <v-list-tile-sub-title>{{ selectedFriend.breed }}</v-list-tile-sub-title>
+                <v-list-tile-title class="font-weight-bold"
+                  >Raza:</v-list-tile-title
+                >
+                <v-list-tile-sub-title>{{
+                  selectedFriend.breed
+                }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title class="font-weight-bold">Sexo:</v-list-tile-title>
+                <v-list-tile-title class="font-weight-bold"
+                  >Sexo:</v-list-tile-title
+                >
                 <v-list-tile-sub-title>
                   <span v-if="selectedFriend.gender == 'm'">Macho</span>
                   <span v-else-if="selectedFriend.gender == 'f'">Hembra</span>
                 </v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title class="font-weight-bold">Tamano:</v-list-tile-title>
+                <v-list-tile-title class="font-weight-bold"
+                  >Tamano:</v-list-tile-title
+                >
                 <v-list-tile-sub-title>
-                  <span v-if="selectedFriend.size">{{ selectedFriend.size }}</span>
+                  <span v-if="selectedFriend.size">{{
+                    selectedFriend.size
+                  }}</span>
                 </v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-title></v-list-tile-title>
-                <v-list-tile-sub-title class="font-weight-bold">{{ selectedFriend.user }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title class="font-weight-bold">{{
+                  selectedFriend.user
+                }}</v-list-tile-sub-title>
               </v-list-tile>
             </v-list>
           </v-flex>
@@ -50,7 +70,14 @@
       <v-form>
         <v-container fluid>
           <v-layout wrap>
-            <v-flex xs12 sm6 md4 lg3 v-for="(image, index) in selectedImages" v-bind:key="index">
+            <v-flex
+              xs12
+              sm6
+              md4
+              lg3
+              v-for="(image, index) in selectedImages"
+              v-bind:key="index"
+            >
               <v-card v-if="image.url">
                 <v-img :src="image.url" :alt="image.name"></v-img>
                 <v-card-title>{{ image.name }}</v-card-title>
@@ -73,30 +100,32 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
-  export default {
-    data: function() {
-      return {
-      }
-    },
-    computed: {
-      ...mapState('animalShelter', [ 'selectedFriend', 'selectedImages' ]),
-      ...mapState('user', [ 'user' ]),
-    },
-    created () {
-      let animalId = this.$route.params.animalId
+export default {
+  data: function() {
+    return {};
+  },
+  computed: {
+    ...mapState("animalShelter", ["selectedFriend", "selectedImages"]),
+    ...mapState("user", ["user"])
+  },
+  created() {
+    let animalId = this.$route.params.animalId;
 
-      this.$store.dispatch('animalShelter/getFriend', animalId)
+    this.$store.dispatch("animalShelter/getFriend", animalId);
+  },
+  methods: {
+    send: async function(animalId) {
+      await this.$store.dispatch(
+        "animalShelter/createAdoptionRequest",
+        animalId
+      );
+      this.$router.push("/private/dashboard");
     },
-    methods: {
-      send: async function (animalId) {
-        await this.$store.dispatch('animalShelter/createAdoptionRequest', animalId)
-        this.$router.push('/private/dashboard')
-      },
-      cancel: function() {
-        this.$router.push('/adoption')
-      }
+    cancel: function() {
+      this.$router.push("/adoption");
     }
   }
+};
 </script>

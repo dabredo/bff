@@ -3,16 +3,16 @@
 </template>
 
 <script>
-  const defaultLayout = 'public'
+const defaultLayout = "public";
 
-  export default {
-    computed: {
-      layout() {
-        return (this.$route.meta.layout || defaultLayout) + '-layout'
-      },
-    },
-    created () {
-      this.$store.dispatch('user/isLoggedIn')
-    },
+export default {
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || defaultLayout) + "-layout";
+    }
+  },
+  created() {
+    this.$store.dispatch("user/isLoggedIn");
   }
+};
 </script>

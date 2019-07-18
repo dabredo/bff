@@ -1,88 +1,88 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-import Home from './components/Home.vue'
-import AnimalShelter from './components/AnimalShelter.vue'
-import Adoption from './views/Adoption.vue'
-import AdoptionConfirmation from './views/AdoptionConfirmation.vue'
-import Login from './views/Login.vue'
-import Registration from './views/Registration.vue'
-import Dashboard from './views/Dashboard.vue'
+import Home from "./components/Home.vue";
+import AnimalShelter from "./components/AnimalShelter.vue";
+import Adoption from "./views/Adoption.vue";
+import AdoptionConfirmation from "./views/AdoptionConfirmation.vue";
+import Login from "./views/Login.vue";
+import Registration from "./views/Registration.vue";
+import Dashboard from "./views/Dashboard.vue";
 
-Vue.use(Router)
+Vue.use(Router);
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/adoption', component: Adoption },
-  { path: '/login', component: Login },
-  { path: '/registration', component: Registration },
+  { path: "/", component: Home },
+  { path: "/adoption", component: Adoption },
+  { path: "/login", component: Login },
+  { path: "/registration", component: Registration },
   {
-    path: '/private/dashboard',
+    path: "/private/dashboard",
     component: Dashboard,
     meta: {
       requiresAuth: true,
-      layout: 'private'
+      layout: "private"
     }
   },
   {
-    path: '/private/animal-shelter',
+    path: "/private/animal-shelter",
     component: AnimalShelter,
     meta: {
       requiresAuth: true,
-      layout: 'private'
+      layout: "private"
     }
   },
   {
-    path: '/private/adoption/:animalId',
+    path: "/private/adoption/:animalId",
     component: AdoptionConfirmation,
     meta: {
       requiresAuth: true,
-      layout: 'private'
+      layout: "private"
     }
   },
   {
-    path: '/private/adoption',
+    path: "/private/adoption",
     component: Adoption,
     meta: {
       requiresAuth: true,
-      layout: 'private'
+      layout: "private"
     }
-  },
-]
+  }
+];
 
 export const router = new Router({
   routes
-})
+});
 
 router.beforeEach(async (to, from, next) => {
-  let auth = await Vue.$auth1
-  const loggedIn = await auth.auth.isLoggedIn()
+  let auth = await Vue.$auth1;
+  const loggedIn = await auth.auth.isLoggedIn();
 
   //XXX: Redirect from auth0
-  if (to.path == '/logout') {
-    localStorage.removeItem('path');
-    next('/')
+  if (to.path == "/logout") {
+    localStorage.removeItem("path");
+    next("/");
   }
 
-  if (to.path == '/login') {
-    localStorage.setItem('path', '/private/dashboard');
+  if (to.path == "/login") {
+    localStorage.setItem("path", "/private/dashboard");
 
-    return auth.auth.login('/#/private/dashboard')
+    return auth.auth.login("/#/private/dashboard");
   }
 
   if (to.meta.requiresAuth && !loggedIn) {
-    localStorage.setItem('path', to.path);
+    localStorage.setItem("path", to.path);
 
-    return auth.auth.login(to.path)
+    return auth.auth.login(to.path);
   }
 
   //Hack to redirect after login
-  const path = localStorage.getItem('path');
-  localStorage.removeItem('path');
+  const path = localStorage.getItem("path");
+  localStorage.removeItem("path");
 
   if (path) {
-    next(path)
+    next(path);
   } else {
-    next()
+    next();
   }
-})
+});

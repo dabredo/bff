@@ -1,28 +1,25 @@
-import Vue from 'vue'
+import Vue from "vue";
 
 export const accountService = {
-    register,
-    getByUserId
+  register,
+  getByUserId
 };
 
 async function register(account) {
-  let app = await Vue.$auth1
+  let app = await Vue.$auth1;
 
-    console.log(account)
+  console.log(account);
 
   return await app.userManagment
     .account()
     .register(account)
-    .failed(err => console.error('error', err))
+    .failed(err => console.error("error", err));
 }
 
 async function getByUserId(userId) {
-  let app = await Vue.$auth1
+  let app = await Vue.$auth1;
 
-  return await app
-    .lists
-    .accounts
-    .readOne({
-      where: { user: userId }
-    })
+  return await app.lists.accounts.readOne({
+    where: { user: userId }
+  });
 }
