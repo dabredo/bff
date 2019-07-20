@@ -1,9 +1,5 @@
 <template>
   <v-container>
-    <h2 class="headline font-weight-bold mb-2">
-      Dashboard informacion
-    </h2>
-
     <AdoptionRequestList
       v-if="isAnimalShelter"
     />

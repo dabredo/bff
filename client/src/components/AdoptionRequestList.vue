@@ -1,6 +1,8 @@
 <template>
   <v-container>
-    <h3>Adoptions</h3>
+    <h2 class="headline font-weight-bold mb-2">
+      Solicitudes de adopcion
+    </h2>
 
     <v-list>
       <v-list-tile
