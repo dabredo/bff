@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Best friends</span>
+      <v-toolbar-title class="text-uppercase">
+        <span>Best friends forever</span>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
