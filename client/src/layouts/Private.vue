@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="user">
+  <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Best friends</span>
@@ -12,7 +12,7 @@
           Pagina principal
         </v-btn>
         <v-btn
-          v-if="user.type === 'animal-shelter'"
+          v-if="isAnimalShelter"
           flat
           to="/private/animal-shelter"
         >
@@ -34,7 +34,6 @@
         <span>{{ user.email }}</span>
       </v-btn>
       <v-btn
-        v-if="user"
         flat
         @click="logout()"
       >
@@ -62,13 +61,27 @@
 
     <v-content>
       <v-layout
-        v-if="!user.type"
+        v-if="hasNotAnAccount"
         class="orange lighten-4 font-weight-bold"
       >
         <v-container>
           <h2>Registrar cuenta</h2>
 
           <AccountForm />
+        </v-container>
+      </v-layout>
+
+      <v-layout
+        v-if="canNotLoadAccount"
+        class="red lighten-3"
+      >
+        <v-container>
+          <h1 class="mb-4">
+            Ups something happen
+          </h1>
+
+          <p>Sorry, we have experienced some issue loading your account.</p>
+          <p>Please try again later or contact us.</p>
         </v-container>
       </v-layout>
 
@@ -80,7 +93,7 @@
 <script>
 import AccountForm from "../components/AccountForm";
 
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -89,6 +102,11 @@ export default {
   computed: {
     ...mapState("user", ["user"]),
     ...mapState("notification", ["message", "type"]),
+    ...mapGetters({
+      'isAnimalShelter': 'user/isAnimalShelter',
+      'hasNotAnAccount': 'user/hasNotAnAccount',
+      'canNotLoadAccount': 'user/canNotLoadAccount',
+    }),
     displayNotification: {
       get: function() {
         return this.$store.state.notification.display;

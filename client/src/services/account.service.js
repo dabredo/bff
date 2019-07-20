@@ -10,8 +10,7 @@ async function register(account) {
 
   return await app.userManagment
     .account()
-    .register(account)
-    .failed(err => console.error("error", err));
+    .register(account);
 }
 
 async function getByUserId(userId) {

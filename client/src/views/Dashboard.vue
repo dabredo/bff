@@ -5,7 +5,7 @@
     </h2>
 
     <AdoptionRequestList
-      v-if="user.type === 'animal-shelter'"
+      v-if="isAnimalShelter"
     />
     <div v-else>
       <p>Espacio personal</p>
@@ -16,14 +16,14 @@
 <script>
 import AdoptionRequestList from "../components/AdoptionRequestList";
 
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     AdoptionRequestList
   },
   computed: {
-    ...mapState("user", ["user"])
+    ...mapGetters({ 'isAnimalShelter': 'user/isAnimalShelter' })
   }
 };
 </script>
