@@ -1,58 +1,79 @@
 <template>
-  <v-container>
+  <div>
     <h2 class="headline font-weight-bold mb-2">
       Solicitudes de adopcion
     </h2>
 
-    <v-list>
-      <v-list-tile
-        v-for="adoption in adoptions"
-        :key="adoption.id"
-      >
-        <v-list-tile-content>
-          <v-list-tile-title>
-            Usuario: {{ adoption.username }} -
-            {{ adoption.createdAt | moment("DD/MM/YYYY") }}
-          </v-list-tile-title>
-          <v-list-tile-sub-title>
-            Animal:{{ adoption.animalName }} -
-            {{ adoption.state }}
-          </v-list-tile-sub-title>
-        </v-list-tile-content>
+    <v-data-table
+      :headers="headers"
+      :items="adoptions"
+    >
+      <template v-slot:no-data>
+        <v-alert
+          :value="true"
+          outline
+          color="info"
+          icon="info"
+          class="text-xs-center"
+        >
+          No hay ninguna solicitud : (
+        </v-alert>
+      </template>
 
-        <v-list-tile-action>
-          <span v-if="adoption.state === 'approved'">Approved</span>
-          <v-btn
-            v-else
-            color="success"
-            @click="approveRequest(adoption.animalId, adoption.user)"
-          >
-            Aceptar
-          </v-btn>
-        </v-list-tile-action>
+      <template v-slot:items="props">
+        <tr>
+          <td>{{ props.item.animalName }}</td>
+          <td>{{ props.item.username }}</td>
 
-        <v-list-tile-action class="ml-2">
-          <span v-if="adoption.state === 'declined'">Declined</span>
-          <v-btn
-            v-else
-            color="error"
-            @click="declineRequest(adoption.animalId, adoption.user)"
-          >
-            Decline
-          </v-btn>
-        </v-list-tile-action>
-      </v-list-tile>
-    </v-list>
-  </v-container>
+          <td>{{ states[props.item.state] }}</td>
+          <td>{{ props.item.createdAt | moment("DD/MM/YYYY hh:mm:ss") }}</td>
+          <td class="text-xs-right">
+            <v-btn
+              v-if="props.item.state === 'requested'"
+              small
+              color="success"
+              @click="approveRequest(props.item.animalId, props.item.user)"
+            >
+              Aceptar
+            </v-btn>
+
+            <v-btn
+              v-if="props.item.state === 'requested'"
+              small
+              color="error"
+              @click="declineRequest(props.item.animalId, props.item.user)"
+            >
+              Rechazar
+            </v-btn>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 
 export default {
+  data: function() {
+    return {
+      headers: [
+        { text: "Animal", value: "animalName" },
+        { text: "Usuario", value: "username" },
+        { text: "Estado", value: "state" },
+        { text: "Fecha", value: "createdAt" },
+        { text: "", sortable: false},
+      ],
+      states: {
+        requested: 'Solicitado',
+        declined: 'Rechazado',
+        approved: 'Aceptado',
+      },
+    };
+  },
   computed: {
     ...mapState("animalShelter", ["adoptions"]),
-    ...mapState("user", ["user"])
   },
   async created() {
     this.$store.dispatch("animalShelter/getAdoptions");
