@@ -236,6 +236,8 @@ export default {
         return;
       }
 
+      const appImage = await Vue.$image;
+
       for (let i = 0; i < friend.images.length; i++) {
         let image = friend.images[i];
 
