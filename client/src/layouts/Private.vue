@@ -14,9 +14,9 @@
         <v-btn
           v-if="isAnimalShelter"
           flat
-          to="/private/animal-shelter"
+          to="/private/animals"
         >
-          Protectora de animales
+          Animales
         </v-btn>
         <v-btn
           flat

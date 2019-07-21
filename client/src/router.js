@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import Home from "./components/Home.vue";
-import AnimalShelter from "./components/AnimalShelter.vue";
+import Animal from "./views/Animal.vue";
 import Adoption from "./views/Adoption.vue";
 import AdoptionConfirmation from "./views/AdoptionConfirmation.vue";
 import Login from "./views/Login.vue";
@@ -25,8 +25,8 @@ const routes = [
     }
   },
   {
-    path: "/private/animal-shelter",
-    component: AnimalShelter,
+    path: "/private/animals",
+    component: Animal,
     meta: {
       requiresAuth: true,
       layout: "private"
