@@ -174,7 +174,15 @@
     </div>
 
     <div v-if="!friends.length">
-      <p>No hay resultados para esta busqueda</p>
+      <v-alert
+        :value="true"
+        outline
+        color="info"
+        icon="info"
+        class="text-xs-center"
+      >
+        No hay resultados para esta busqueda : (
+      </v-alert>
     </div>
   </div>
 </template>
