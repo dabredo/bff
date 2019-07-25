@@ -23,28 +23,34 @@
       <template v-slot:items="props">
         <tr>
           <td>{{ props.item.animalName }}</td>
-          <td>{{ props.item.username }}</td>
-
+          <td v-if="isAnimalShelter">
+            {{ props.item.username }}
+          </td>
+          <td v-else>
+            {{ props.item.animalShelterName }}
+          </td>
           <td>{{ states[props.item.state] }}</td>
           <td>{{ props.item.createdAt | moment("DD/MM/YYYY hh:mm:ss") }}</td>
           <td class="text-xs-right">
-            <v-btn
-              v-if="props.item.state === 'requested'"
-              small
-              color="success"
-              @click="approveRequest(props.item.animalId, props.item.user)"
-            >
-              Aceptar
-            </v-btn>
+            <template v-if="isAnimalShelter">
+              <v-btn
+                v-if="props.item.state === 'requested'"
+                small
+                color="success"
+                @click="approveRequest(props.item.animalId, props.item.user)"
+              >
+                Aceptar
+              </v-btn>
 
-            <v-btn
-              v-if="props.item.state === 'requested'"
-              small
-              color="error"
-              @click="declineRequest(props.item.animalId, props.item.user)"
-            >
-              Rechazar
-            </v-btn>
+              <v-btn
+                v-if="props.item.state === 'requested'"
+                small
+                color="error"
+                @click="declineRequest(props.item.animalId, props.item.user)"
+              >
+                Rechazar
+              </v-btn>
+            </template>
           </td>
         </tr>
       </template>
@@ -53,18 +59,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   data: function() {
     return {
-      headers: [
-        { text: "Animal", value: "animalName" },
-        { text: "Usuario", value: "username" },
-        { text: "Estado", value: "state" },
-        { text: "Fecha", value: "createdAt" },
-        { text: "", sortable: false},
-      ],
       states: {
         requested: 'Solicitado',
         declined: 'Rechazado',
@@ -74,9 +73,26 @@ export default {
   },
   computed: {
     ...mapState("animalShelter", ["adoptions"]),
+    ...mapState("user", ["user"]),
+    ...mapGetters({ 'isAnimalShelter': 'user/isAnimalShelter' }),
+    headers() {
+        return [
+            { text: "Animal", value: "animalName" },
+            this.isAnimalShelter
+                ? { text: 'Usuario', value: "username" }
+                : { text: "Protectora", value: "animalShelterName" },
+            { text: "Estado", value: "state" },
+            { text: "Fecha", value: "createdAt" },
+            { text: "", sortable: false},
+        ]
+    },
   },
   async created() {
-    this.$store.dispatch("animalShelter/getAdoptions");
+      if (this.isAnimalShelter) {
+        this.$store.dispatch("animalShelter/getAdoptionRequestsForAnimalShelter", this.user.id);
+      } else {
+        this.$store.dispatch("animalShelter/getAdoptionRequestsForUser", this.user.id);
+      }
   },
   methods: {
     declineRequest(animalId, userId) {

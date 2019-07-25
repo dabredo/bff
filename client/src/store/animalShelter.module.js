@@ -127,11 +127,24 @@ export const animalShelter = {
     declineAdoptionRequest({ commit }, request) {
       return adoptionService.decline(request.animalId, request.userId);
     },
-    async getAdoptions({ commit }) {
-      let res = await adoptionService.getAll();
+    async getAdoptionRequestsForUser({ commit }, userId) {
+      let res = await adoptionService.getAllByUser(userId);
 
       res
         .started(result => {
+          console.log(result)
+          commit("getAdoptionsSuccess", result);
+        })
+        .updated(result => {
+          commit("getAdoptionsSuccess", result);
+        });
+    },
+    async getAdoptionRequestsForAnimalShelter({ commit }, animalShelterId) {
+      let res = await adoptionService.getAllByAnimalShelter(animalShelterId);
+
+      res
+        .started(result => {
+          console.log(result)
           commit("getAdoptionsSuccess", result);
         })
         .updated(result => {

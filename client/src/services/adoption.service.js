@@ -4,7 +4,8 @@ export const adoptionService = {
   create,
   approve,
   decline,
-  getAll
+  getAllByUser,
+  getAllByAnimalShelter,
 };
 
 async function create(animalId) {
@@ -34,10 +35,20 @@ async function decline(animalId, userId) {
     .failed(err => console.error("error", err));
 }
 
-async function getAll() {
+async function getAllByUser(userId) {
   const app = await Vue.$app;
 
   return app.lists.adoptions.readAndObserve({
-    orderBy: { createdAt: "ascending" }
+      where: { user: userId },
+      orderBy: { createdAt: "ascending" }
+  });
+}
+
+async function getAllByAnimalShelter(animalShelterId) {
+  const app = await Vue.$app;
+
+  return app.lists.adoptions.readAndObserve({
+      where: { animalShelterId: animalShelterId },
+      orderBy: { createdAt: "ascending" }
   });
 }

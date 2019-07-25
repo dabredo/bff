@@ -1,11 +1,6 @@
 <template>
   <v-container>
-    <AdoptionRequestList
-      v-if="isAnimalShelter"
-    />
-    <div v-else>
-      <p>Espacio personal</p>
-    </div>
+    <AdoptionRequestList />
   </v-container>
 </template>
 

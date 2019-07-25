@@ -21,6 +21,9 @@ const initialState = {
       updated: { forPublic: true },
       pictureUploaded: { forPublic: true },
       deleted: { forPublic: true },
+      adoptionRequested: { forAuthenticated: true, forPublic: false },
+      adoptionDeclined: { forAuthenticated: true, forPublic: false },
+      adoptionApproved: { forAuthenticated: true, forPublic: false },
     }
   }
 };
@@ -85,7 +88,8 @@ const commands = {
     friend.events.publish('adoptionRequested', {
       user: command.user.id,
       username: command.user.token.name, //TODO: This is not updated in readmodel
-      animalName: friend.state.name //TODO: This is not updated in readmodel
+      animalName: friend.state.name, //TODO: This is not updated in readmodel
+      animalShelterId: friend.state.user
     })
   },
   approveAdoption(friend, command) {

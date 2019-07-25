@@ -11,12 +11,18 @@ const fields = {
 };
 
 const projections = {
-  'shelterManagment.friend.adoptionRequested' (adoptions, event) {
+  async 'shelterManagment.friend.adoptionRequested' (adoptions, event, { app }) {
+    const animalShelter = await app.lists.accounts.readOne({
+      where: { user: event.data.animalShelterId }
+    });
+
     adoptions.add({
       user: event.data.user,
       username: event.data.username,
       animalId: event.aggregate.id,
       animalName: event.data.animalName,
+      animalShelterId: event.data.animalShelterId,
+      animalShelterName: animalShelter.name, //TODO: This value should be updated
       createdAt: event.metadata.timestamp,
     })
   },
