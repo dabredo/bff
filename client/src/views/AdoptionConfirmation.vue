@@ -124,6 +124,21 @@ export default {
   },
   computed: {
     ...mapState("animalShelter", ["selectedFriend", "selectedImages"]),
+    ...mapState("animalShelter", ["adoptionRequest"]),
+  },
+  watch: {
+    adoptionRequest: function(value) {
+        if (value === 'failed') {
+          this.$store.commit("notification/displayError", "La adopcion no se puede solicitar");
+          return;
+        }
+
+        if (value === 'success') {
+          this.$store.commit("notification/displaySuccess", "La adopcion se ha solicitado");
+          this.$router.push("/private/dashboard");
+          return;
+        }
+    }
   },
   created() {
     let animalId = this.$route.params.animalId;
@@ -131,12 +146,11 @@ export default {
     this.$store.dispatch("animalShelter/getFriend", animalId);
   },
   methods: {
-    requestAdoption: async function(animalId) {
-      await this.$store.dispatch(
+    requestAdoption: function(animalId) {
+      this.$store.dispatch(
         "animalShelter/createAdoptionRequest",
         animalId
       );
-      this.$router.push("/private/dashboard");
     },
     goBack: function() {
       this.$router.push("/adoption");

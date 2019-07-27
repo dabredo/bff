@@ -6,6 +6,7 @@ export const animalShelter = {
   strict: true,
   namespaced: true,
   state: {
+    adoptionRequest: undefined,
     adoptions: [],
     friends: [],
     selectedImages: [],
@@ -18,6 +19,15 @@ export const animalShelter = {
   },
   getters: {},
   mutations: {
+    clearAdoptionRequest(state) {
+      state.adoptionRequest = undefined;
+    },
+    failAdoptionRequest(state) {
+      state.adoptionRequest = 'failed';
+    },
+    successAdoptionRequest(state) {
+      state.adoptionRequest = 'success';
+    },
     selectImages(state, images) {
       state.selectedImages = images;
     },
@@ -114,8 +124,17 @@ export const animalShelter = {
       await animalService.remove(friendId);
       commit("unselectFriend"); // NOT NEEDED
     },
-    createAdoptionRequest({ commit }, animalId) {
-      return adoptionService.create(animalId);
+    async createAdoptionRequest({ commit }, animalId) {
+      commit("clearAdoptionRequest");
+
+      let res = await adoptionService.create(animalId)
+      res
+        .failed((error, command) => {
+          commit("failAdoptionRequest");
+        })
+        .await('adoptionRequested', (event, command) => {
+          commit("successAdoptionRequest");
+        });
     },
     approveAdoptionRequest({ commit }, request) {
       return adoptionService.approve(request.animalId, request.userId);

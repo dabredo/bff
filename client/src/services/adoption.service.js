@@ -11,10 +11,9 @@ export const adoptionService = {
 async function create(animalId) {
   const app = await Vue.$app;
 
-  return await app.shelterManagment
+  return app.shelterManagment
     .friend(animalId)
     .requestAdoption()
-    .failed(err => console.error("error", err));
 }
 
 async function approve(animalId, userId) {
