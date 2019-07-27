@@ -20,15 +20,7 @@
         <td>{{ props.item.name }}</td>
         <td>{{ props.item.breed }}</td>
         <td>
-          <template
-            v-if="props.item.gender === 'm'"
-          >
-            Macho
-          </template><template
-            v-else
-          >
-            Hembra
-          </template>
+          <AnimalGender :gender="props.item.gender" />
         </td>
         <td>
           <AnimalSize :size="props.item.size" />
@@ -77,11 +69,13 @@
 import { mapState } from "vuex";
 
 import AnimalSize from "../components/AnimalSize";
+import AnimalGender from "../components/AnimalGender";
 
 export default {
   name: "AnimalList",
   components: {
-    AnimalSize
+    AnimalSize,
+    AnimalGender
   },
   data: function() {
     return {

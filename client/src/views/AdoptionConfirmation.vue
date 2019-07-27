@@ -55,8 +55,7 @@
                   Sexo:
                 </v-list-tile-title>
                 <v-list-tile-sub-title>
-                  <span v-if="selectedFriend.gender == 'm'">Macho</span>
-                  <span v-else-if="selectedFriend.gender == 'f'">Hembra</span>
+                  <AnimalGender :gender="selectedFriend.gender" />
                 </v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
@@ -135,10 +134,12 @@
 import { mapState } from "vuex";
 
 import AnimalSize from "../components/AnimalSize";
+import AnimalGender from "../components/AnimalGender";
 
 export default {
   components: {
-    AnimalSize
+    AnimalSize,
+    AnimalGender
   },
   data: function() {
     return {};
