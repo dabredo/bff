@@ -132,7 +132,6 @@ export const animalShelter = {
 
       res
         .started(result => {
-          console.log(result)
           commit("getAdoptionsSuccess", result);
         })
         .updated(result => {
@@ -144,7 +143,6 @@ export const animalShelter = {
 
       res
         .started(result => {
-          console.log(result)
           commit("getAdoptionsSuccess", result);
         })
         .updated(result => {
