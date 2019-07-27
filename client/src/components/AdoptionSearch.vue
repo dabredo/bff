@@ -138,7 +138,7 @@
                       Tamano:
                     </v-list-tile-title>
                     <v-list-tile-sub-title>
-                      <span v-if="friend.size">{{ friend.size }}</span>
+                      <AnimalSize :size="friend.size" />
                     </v-list-tile-sub-title>
                   </v-list-tile>
                   <v-list-tile>
@@ -190,8 +190,13 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 
+import AnimalSize from "../components/AnimalSize";
+
 export default {
   name: "AdoptionSearch",
+  components: {
+    AnimalSize
+  },
   data: function() {
     return {
       searchFormDisplayed: false,

@@ -16,7 +16,7 @@
                 <v-list-tile-title
                   class="font-weight-bold"
                 >
-                  Name:
+                  Nombre:
                 </v-list-tile-title>
                 <v-list-tile-sub-title>
                   {{
@@ -66,9 +66,7 @@
                   Tamano:
                 </v-list-tile-title>
                 <v-list-tile-sub-title>
-                  <span v-if="selectedFriend.size">{{
-                    selectedFriend.size
-                  }}</span>
+                  <AnimalSize :size="selectedFriend.size" />
                 </v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
@@ -136,7 +134,12 @@
 <script>
 import { mapState } from "vuex";
 
+import AnimalSize from "../components/AnimalSize";
+
 export default {
+  components: {
+    AnimalSize
+  },
   data: function() {
     return {};
   },

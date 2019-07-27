@@ -31,21 +31,7 @@
           </template>
         </td>
         <td>
-          <template
-            v-if="props.item.size === 'small'"
-          >
-            Pequeno
-          </template>
-          <template
-            v-else-if="props.item.size === 'medium'"
-          >
-            Mediano
-          </template>
-          <template
-            v-else
-          >
-            Grande
-          </template>
+          <AnimalSize :size="props.item.size" />
         </td>
         <td v-if="props.item.birthdate">
           {{ props.item.birthdate | moment("DD/MM/YYYY") }}
@@ -90,8 +76,13 @@
 <script>
 import { mapState } from "vuex";
 
+import AnimalSize from "../components/AnimalSize";
+
 export default {
   name: "AnimalList",
+  components: {
+    AnimalSize
+  },
   data: function() {
     return {
       headers: [
