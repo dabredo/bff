@@ -160,9 +160,9 @@
                   <v-btn
                     class="mb-0"
                     color="secondary"
-                    @click="adopt(friend.id)"
+                    @click="gotToDetails(friend.id)"
                   >
-                    Adoptar
+                    Ver detalles
                   </v-btn>
                 </v-layout>
               </v-flex>
@@ -226,7 +226,7 @@ export default {
 
       this.search({});
     },
-    adopt(animalId) {
+    gotToDetails(animalId) {
       this.$router.push(`/private/adoption/${animalId}`);
     }
   }

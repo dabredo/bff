@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h2 class="headline font-weight-bold mb-2">
-      Enviar solicitud de adopcion
+      Detalles del animal
     </h2>
 
     <v-card v-if="selectedFriend">
@@ -18,11 +18,7 @@
                 >
                   Nombre:
                 </v-list-tile-title>
-                <v-list-tile-sub-title>
-                  {{
-                    selectedFriend.name
-                  }}
-                </v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ selectedFriend.name }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-title
@@ -30,28 +26,16 @@
                 >
                   Fecha de nacimiento:
                 </v-list-tile-title>
-                <v-list-tile-sub-title>
-                  {{
-                    selectedFriend.birthdate | moment("DD/MM/YYYY")
-                  }}
-                </v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ selectedFriend.birthdate | moment("DD/MM/YYYY") }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title
-                  class="font-weight-bold"
-                >
+                <v-list-tile-title class="font-weight-bold">
                   Raza:
                 </v-list-tile-title>
-                <v-list-tile-sub-title>
-                  {{
-                    selectedFriend.breed
-                  }}
-                </v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ selectedFriend.breed }}</v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title
-                  class="font-weight-bold"
-                >
+                <v-list-tile-title class="font-weight-bold">
                   Sexo:
                 </v-list-tile-title>
                 <v-list-tile-sub-title>
@@ -59,22 +43,16 @@
                 </v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title
-                  class="font-weight-bold"
-                >
+                <v-list-tile-title class="font-weight-bold">
                   Tamano:
                 </v-list-tile-title>
-                <v-list-tile-sub-title>
-                  <AnimalSize :size="selectedFriend.size" />
-                </v-list-tile-sub-title>
+                <v-list-tile-sub-title><AnimalSize :size="selectedFriend.size" /></v-list-tile-sub-title>
               </v-list-tile>
               <v-list-tile>
-                <v-list-tile-title />
-                <v-list-tile-sub-title class="font-weight-bold">
-                  {{
-                    selectedFriend.user
-                  }}
-                </v-list-tile-sub-title>
+                <v-list-tile-title class="font-weight-bold">
+                  Protectora:
+                </v-list-tile-title>
+                <v-list-tile-sub-title>{{ selectedFriend.animalShelter }}</v-list-tile-sub-title>
               </v-list-tile>
             </v-list>
           </v-flex>
@@ -115,15 +93,15 @@
       <v-card-actions>
         <v-btn
           color="success"
-          @click="send(selectedFriend.id)"
+          @click="requestAdoption(selectedFriend.id)"
         >
-          Enviar
+          Solicitar adopcion
         </v-btn>
         <v-btn
           color="secondary"
-          @click="cancel()"
+          @click="goBack()"
         >
-          Cancelar
+          Volver
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -146,7 +124,6 @@ export default {
   },
   computed: {
     ...mapState("animalShelter", ["selectedFriend", "selectedImages"]),
-    ...mapState("user", ["user"])
   },
   created() {
     let animalId = this.$route.params.animalId;
@@ -154,14 +131,14 @@ export default {
     this.$store.dispatch("animalShelter/getFriend", animalId);
   },
   methods: {
-    send: async function(animalId) {
+    requestAdoption: async function(animalId) {
       await this.$store.dispatch(
         "animalShelter/createAdoptionRequest",
         animalId
       );
       this.$router.push("/private/dashboard");
     },
-    cancel: function() {
+    goBack: function() {
       this.$router.push("/adoption");
     }
   }
