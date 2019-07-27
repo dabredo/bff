@@ -44,7 +44,7 @@
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-title class="font-weight-bold">
-                  Tamano:
+                  Tamaño:
                 </v-list-tile-title>
                 <v-list-tile-sub-title><AnimalSize :size="selectedFriend.size" /></v-list-tile-sub-title>
               </v-list-tile>
