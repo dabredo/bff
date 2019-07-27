@@ -16,11 +16,7 @@ export const animalShelter = {
       { value: "big", text: "Grande" }
     ]
   },
-  getters: {
-    friendsCount: state => {
-      return state.friends.length;
-    }
-  },
+  getters: {},
   mutations: {
     selectImages(state, images) {
       state.selectedImages = images;
