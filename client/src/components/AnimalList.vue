@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "AnimalList",
@@ -106,7 +106,7 @@ export default {
       ],
       states: [
         { value: "not_adopted", text: "No adoptado" },
-        { value: "adopted", text: "Adoptado" }
+        { value: "adopted", text: "doptado" }
       ]
     };
   },
@@ -127,7 +127,7 @@ export default {
         //TODO: Delete images of deleted friends
 
         await this.$store.dispatch("animalShelter/deleteFriend", friendId);
-        this.$store.commit("notification/displaySuccess", "Friend was removed");
+        this.$store.commit("notification/displaySuccess", "Animal eliminado");
       }
     }
   }
