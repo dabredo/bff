@@ -203,7 +203,6 @@ export default {
   },
   computed: {
     ...mapState("animalShelter", ["friends", "sizes"]),
-    ...mapGetters("animalShelter", ["friendsCount"])
   },
   created() {
     this.$store.dispatch("animalShelter/getAllNotAdopted", {});
