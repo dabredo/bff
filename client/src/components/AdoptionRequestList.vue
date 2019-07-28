@@ -72,7 +72,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("animalShelter", ["adoptions"]),
+    ...mapState("adoption", ["adoptions"]),
     ...mapState("user", ["user"]),
     ...mapGetters({ 'isAnimalShelter': 'user/isAnimalShelter' }),
     headers() {
@@ -89,9 +89,9 @@ export default {
   },
   async created() {
       if (this.isAnimalShelter) {
-        this.$store.dispatch("animalShelter/getAdoptionRequestsForAnimalShelter", this.user.id);
+        this.$store.dispatch("adoption/loadRequestsForAnimalShelter", this.user.id);
       } else {
-        this.$store.dispatch("animalShelter/getAdoptionRequestsForUser", this.user.id);
+        this.$store.dispatch("adoption/loadRequestsForUser", this.user.id);
       }
   },
   methods: {
@@ -101,7 +101,7 @@ export default {
         userId: userId
       };
 
-      this.$store.dispatch("animalShelter/declineAdoptionRequest", request);
+      this.$store.dispatch("adoption/declineRequest", request);
     },
     approveRequest(animalId, userId) {
       let request = {
@@ -109,7 +109,7 @@ export default {
         userId: userId
       };
 
-      this.$store.dispatch("animalShelter/approveAdoptionRequest", request);
+      this.$store.dispatch("adoption/approveRequest", request);
     }
   }
 };

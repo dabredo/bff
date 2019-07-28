@@ -19,19 +19,17 @@ async function create(animalId) {
 async function approve(animalId, userId) {
   const app = await Vue.$app;
 
-  return await app.shelterManagment
+  return app.shelterManagment
     .friend(animalId)
     .approveAdoption({ userId: userId })
-    .failed(err => console.error("error", err));
 }
 
 async function decline(animalId, userId) {
   const app = await Vue.$app;
 
-  return await app.shelterManagment
+  return app.shelterManagment
     .friend(animalId)
     .declineAdoption({ userId: userId })
-    .failed(err => console.error("error", err));
 }
 
 async function getAllByUser(userId) {

@@ -1,13 +1,10 @@
 import Vue from "vue";
 import { animalService } from "../services/animal.service";
-import { adoptionService } from "../services/adoption.service";
 
 export const animalShelter = {
   strict: true,
   namespaced: true,
   state: {
-    adoptionRequest: undefined,
-    adoptions: [],
     friends: [],
     selectedImages: [],
     selectedFriend: undefined,
@@ -19,15 +16,6 @@ export const animalShelter = {
   },
   getters: {},
   mutations: {
-    clearAdoptionRequest(state) {
-      state.adoptionRequest = undefined;
-    },
-    failAdoptionRequest(state) {
-      state.adoptionRequest = 'failed';
-    },
-    successAdoptionRequest(state) {
-      state.adoptionRequest = 'success';
-    },
     selectImages(state, images) {
       state.selectedImages = images;
     },
@@ -52,9 +40,6 @@ export const animalShelter = {
       state.selectedFriend = undefined;
       state.selectedImages = [];
     },
-    getAdoptionsSuccess(state, adoptions) {
-      state.adoptions = adoptions;
-    }
   },
   actions: {
     async getAllNotAdopted({ commit }, animalDetails) {
@@ -123,46 +108,6 @@ export const animalShelter = {
     async deleteFriend({ commit }, friendId) {
       await animalService.remove(friendId);
       commit("unselectFriend"); // NOT NEEDED
-    },
-    async createAdoptionRequest({ commit }, animalId) {
-      commit("clearAdoptionRequest");
-
-      let res = await adoptionService.create(animalId)
-      res
-        .failed((error, command) => {
-          commit("failAdoptionRequest");
-        })
-        .await('adoptionRequested', (event, command) => {
-          commit("successAdoptionRequest");
-        });
-    },
-    approveAdoptionRequest({ commit }, request) {
-      return adoptionService.approve(request.animalId, request.userId);
-    },
-    declineAdoptionRequest({ commit }, request) {
-      return adoptionService.decline(request.animalId, request.userId);
-    },
-    async getAdoptionRequestsForUser({ commit }, userId) {
-      let res = await adoptionService.getAllByUser(userId);
-
-      res
-        .started(result => {
-          commit("getAdoptionsSuccess", result);
-        })
-        .updated(result => {
-          commit("getAdoptionsSuccess", result);
-        });
-    },
-    async getAdoptionRequestsForAnimalShelter({ commit }, animalShelterId) {
-      let res = await adoptionService.getAllByAnimalShelter(animalShelterId);
-
-      res
-        .started(result => {
-          commit("getAdoptionsSuccess", result);
-        })
-        .updated(result => {
-          commit("getAdoptionsSuccess", result);
-        });
     }
   }
 };

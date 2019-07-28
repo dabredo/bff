@@ -124,10 +124,10 @@ export default {
   },
   computed: {
     ...mapState("animalShelter", ["selectedFriend", "selectedImages"]),
-    ...mapState("animalShelter", ["adoptionRequest"]),
+    ...mapState("adoption", ["requestState"]),
   },
   watch: {
-    adoptionRequest: function(value) {
+    requestState: function(value) {
         if (value === 'failed') {
           this.$store.commit("notification/displayError", "La adopcion no se puede solicitar");
           return;
@@ -148,7 +148,7 @@ export default {
   methods: {
     requestAdoption: function(animalId) {
       this.$store.dispatch(
-        "animalShelter/createAdoptionRequest",
+        "adoption/request",
         animalId
       );
     },
