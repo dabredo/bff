@@ -146,10 +146,8 @@ const events = {
   },
 
   adoptionRequested (friend, event) {
-    let adoptionRequests = friend.state.adoptionRequests;
-    adoptionRequests.push(event.data.user)
     friend.setState({
-      adoptionRequests: adoptionRequests
+      adoptionRequests: [ ...friend.state.adoptionRequests, event.data.user ]
     })
   },
   adoptionApproved (friend, event) {
