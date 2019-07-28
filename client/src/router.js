@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import Home from "./components/Home.vue";
+import Home from "./views/Home.vue";
 import Animal from "./views/Animal.vue";
 import Adoption from "./views/Adoption.vue";
 import AdoptionConfirmation from "./views/AdoptionConfirmation.vue";
