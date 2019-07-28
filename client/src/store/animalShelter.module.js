@@ -65,6 +65,8 @@ export const animalShelter = {
       });
     },
     async getFriends({ commit }) {
+      commit("unselectFriend");
+
       let res = await animalService.getAllByAnimalShelter();
       res
         .started(result => {
