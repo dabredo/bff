@@ -71,7 +71,6 @@ export const adoption = {
       let res = await adoptionService.decline(request.animalId, request.userId)
       res
         .failed((error, command) => {
-        commit('displayError', "The account could not be saved",);
           commit('notification/displayError', "La solicitud de adopcion no se pudo rechazar", { root: true });
         })
         .await('adoptionDeclined', (event, command) => {
